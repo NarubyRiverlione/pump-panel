@@ -5,9 +5,13 @@ import Display from 'seven-segment-display'
 type PropsTypes = {
   PumpReadout:number
   PumpReadoutUnit:string
+  ChangePumpMode:(newMode:string)=>void
+  PumpIncDec:(change:number)=>void
 }
 
-export default function PumpControls({ PumpReadout, PumpReadoutUnit }:PropsTypes) {
+export default function PumpControls({
+  PumpReadout, PumpReadoutUnit, ChangePumpMode, PumpIncDec,
+}:PropsTypes) {
   return (
     <div>
       <Row><h4>Pump Controls</h4></Row>
@@ -40,10 +44,10 @@ export default function PumpControls({ PumpReadout, PumpReadoutUnit }:PropsTypes
             </Row>
             <Row>
               <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-                <Button style={{ width: '100px' }} color="info">RPM</Button>
+                <Button style={{ width: '100px' }} color="info" onClick={() => ChangePumpMode('RPM')}>RPM</Button>
               </Row>
               <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-                <Button style={{ width: '100px' }} color="info">Pressure</Button>
+                <Button style={{ width: '100px' }} color="info" onClick={() => ChangePumpMode('Bar')}>Pressure</Button>
               </Row>
             </Row>
           </Row>
@@ -56,10 +60,16 @@ export default function PumpControls({ PumpReadout, PumpReadoutUnit }:PropsTypes
             </div>
           </Row>
           <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-            <Button style={{ width: '75px', height: '75px' }}><div style={{ fontWeight: 800 }}>+</div></Button>
+            <Button style={{ width: '75px', height: '75px' }} onClick={() => { PumpIncDec(5) }}>
+              <div style={{ fontWeight: 800 }}>+</div>
+
+            </Button>
           </Row>
           <Row style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button style={{ width: '75px', height: '75px' }}><div style={{ fontWeight: 800 }}>-</div></Button>
+            <Button style={{ width: '75px', height: '75px' }} onClick={() => { PumpIncDec(-5) }}>
+              <div style={{ fontWeight: 800 }}>-</div>
+
+            </Button>
           </Row>
 
         </Col>

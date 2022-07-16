@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { Row, Col } from 'reactstrap'
 import Discharge from './Discharge'
 import Intake from './Intake'
@@ -7,13 +7,25 @@ import PumpControls from './PumpControls'
 
 export default function PumpPanel() {
   const IntakePressure = 0
-  const PumpPressure = 0
-  const discharge1 = 0
-  const discharge2 = 0
-  const discharge3 = 0
-  const discharge4 = 0
-  const PumpReadout = 123
-  const PumpReadoutUnit = 'bar'
+
+  const [DischargePressures, setDischarges] = useState([0, 0, 0, 0])
+  const [PumpPressure, setPumpPressure] = useState(0)
+  const [PumpRPM, setPumpRPM] = useState(0)
+  const [PumpMode, setPumpMode] = useState('Bar')
+
+  const changedDischarge = (dischargeSetpoint:number, dischargeLine:number) => {
+    const newDischarges = [...DischargePressures]
+    newDischarges[dischargeLine - 1] = (PumpPressure / 100) * dischargeSetpoint
+    setDischarges(newDischarges)
+  }
+
+  const PumpIncDec = (change:number) => {
+    if (PumpMode === 'RPM') {
+      setPumpRPM(PumpRPM + change)
+      return
+    }
+    setPumpPressure(PumpPressure + change)
+  }
 
   return (
     <div>
@@ -26,22 +38,27 @@ export default function PumpPanel() {
           <MasterGauge name="Master Discharge Output" pressure={PumpPressure} />
         </Col>
         <Col>
-          <PumpControls PumpReadout={PumpReadout} PumpReadoutUnit={PumpReadoutUnit} />
+          <PumpControls
+            PumpReadout={PumpMode === 'RPM' ? PumpRPM : PumpPressure}
+            PumpReadoutUnit={PumpMode}
+            ChangePumpMode={((newMode) => { setPumpMode(newMode) })}
+            PumpIncDec={PumpIncDec}
+          />
         </Col>
       </Row>
       {/* Discharges */}
-      <Row>
-        <Col>
-          <Discharge name="Discharge 1" pressure={discharge1} />
+      <Row style={{ paddingTop: '1em' }}>
+        <Col md={3}>
+          <Discharge dischargeNumber={1} pressure={DischargePressures[0]} color="yellow" changedDischarge={changedDischarge} />
         </Col>
-        <Col>
-          <Discharge name="Discharge 2" pressure={discharge2} />
+        <Col md={3}>
+          <Discharge dischargeNumber={2} pressure={DischargePressures[1]} color="blue" changedDischarge={changedDischarge} />
         </Col>
-        <Col>
-          <Discharge name="Discharge 3" pressure={discharge3} />
+        <Col md={3}>
+          <Discharge dischargeNumber={3} pressure={DischargePressures[2]} color="red" changedDischarge={changedDischarge} />
         </Col>
-        <Col>
-          <Discharge name="Discharge 4" pressure={discharge4} />
+        <Col md={3}>
+          <Discharge dischargeNumber={3} pressure={DischargePressures[3]} color="green" changedDischarge={changedDischarge} />
         </Col>
       </Row>
       {/* Intake */}
