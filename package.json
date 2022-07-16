@@ -10,9 +10,12 @@
     "@types/node": "^16.11.44",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "canvas-gauges": "^2.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "reactstrap": "^9.1.1",
+    "seven-segment-display": "^0.2.0",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
@@ -20,12 +23,100 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "airbnb",
+      "airbnb-typescript"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "@typescript-eslint/camelcase": "off",
+      "@typescript-eslint/lines-between-class-members": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "no-unused-vars": "off",
+      "no-debugger": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "max-len": [
+        "warn",
+        {
+          "code": 150,
+          "comments": 150
+        }
+      ],
+      "@typescript-eslint/indent": [
+        "warn",
+        2
+      ],
+      "jsx-a11y/no-noninteractive-element-interactions": [
+        "warn"
+      ],
+      "jsx-a11y/click-events-have-key-events": [
+        "warn"
+      ],
+      "jsx-a11y/no-static-element-interactions": [
+        "warn"
+      ],
+      "linebreak-style": [
+        0
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "@typescript-eslint/semi": [
+        "error",
+        "never"
+      ],
+      "no-mixed-spaces-and-tabs": [
+        "warn",
+        "smart-tabs"
+      ],
+      "no-console": [
+        "off"
+      ],
+      "react/forbid-prop-types": [
+        0
+      ],
+      "react/jsx-fragments": [
+        2,
+        "element"
+      ],
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".tsx",
+            ".jsx"
+          ]
+        }
+      ],
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": [
+        "error"
+      ]
+    },
+    "ignorePatterns": [
+      "build/*"
     ]
   },
   "browserslist": {
@@ -39,5 +130,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "eslint": "^8.19.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
