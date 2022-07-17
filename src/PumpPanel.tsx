@@ -48,21 +48,20 @@ export default function PumpPanel() {
       </Row>
       {/* Discharges */}
       <Row style={{ paddingTop: '1em' }}>
-        <Col md={3}>
+        <Col md={2}>
           <Discharge dischargeNumber={1} pressure={DischargePressures[0]} color="yellow" changedDischarge={changedDischarge} />
         </Col>
-        <Col md={3}>
+        <Col md={2}>
           <Discharge dischargeNumber={2} pressure={DischargePressures[1]} color="blue" changedDischarge={changedDischarge} />
         </Col>
-        <Col md={3}>
+        <Col md={2}>
           <Discharge dischargeNumber={3} pressure={DischargePressures[2]} color="red" changedDischarge={changedDischarge} />
         </Col>
-        <Col md={3}>
-          <Discharge dischargeNumber={3} pressure={DischargePressures[3]} color="green" changedDischarge={changedDischarge} />
+        <Col md={2}>
+          <Discharge dischargeNumber={4} pressure={DischargePressures[3]} color="green" changedDischarge={changedDischarge} />
         </Col>
-      </Row>
-      {/* Intake */}
-      <Row>
+
+        {/* Intake */}
         <Col>
           <Intake />
         </Col>

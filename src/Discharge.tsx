@@ -27,7 +27,8 @@ export default function Discharge({
   }
   return (
     <div style={{
-      border: '5px solid', borderRadius: '20px', borderColor: `${color}`, padding: '10px',
+      // border: '5px solid', borderRadius: '20px', borderColor: `${color}`,
+      padding: '10px',
     }}
     >
       <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -38,14 +39,22 @@ export default function Discharge({
           minValue={0}
           maxValue={50}
           // width={300}
-          height={150}
+          height={160}
           majorTicks={['0', '10', '20', '30', '40', '50']}
           minorTicks={5}
           valueBox={false}
+          animationDuration="1500"
+          animationRule="elastic"
+          animation
+          highlights={[{ from: 10, to: 40, color: 'lightgray' }, { from: 40, to: 50, color: 'gray' }]}
+          fontNumbersSize={18}
         />
       </Row>
       <Row>
-        <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+        <div style={{
+          display: 'flex', justifyContent: 'center', textAlign: 'center', padding: '10px',
+        }}
+        >
 
           <ControlHandle
             Name={`Discharge ${dischargeNumber}`}
