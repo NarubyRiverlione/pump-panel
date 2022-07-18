@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Row } from 'reactstrap'
-import ControlHandle from './ControlHandle'
+import ControlHandle from '../Components/ControlHandle'
 // eslint-disable-next-line import/extensions
-import ReactRadialGauge from './Gauge/RadialGauge'
+import ReactRadialGauge from '../Components/Gauge/RadialGauge'
 
 type PropsTypes = {
   dischargeNumber :number

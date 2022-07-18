@@ -1,29 +1,24 @@
-import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { Col, Row } from 'reactstrap'
-import ControlHandle from './ControlHandle'
-import IntakeConnection from './IntakeConnection'
-import TankLevel from './TankLevel'
+import ControlHandle from '../Components/ControlHandle'
+import IntakeConnection from '../Components/IntakeConnection'
+import TankLevel from '../Components/TankLevel'
+import SimContext from '../SimContext'
 
-export default function Intake() {
-  const [TankFill, setTankFill] = useState(0)
-  const [TankToPump, setTankToPump] = useState(0)
-  const [TankContent, setTankContent] = useState(100)
-
+const Intake = observer(() => {
+  const Sim = SimContext()
+  const { TankFillValve, TankToPumpValve, BoosterTank } = Sim
   const LeftClickTankFill = () => {
-    const newTankFill = TankFill + 20 > 100 ? 100 : TankFill + 20
-    setTankFill(newTankFill)
+    TankFillValve.Open(20)
   }
   const RightClickTankFill = () => {
-    const newTankFill = TankFill - 20 < 0 ? 0 : TankFill - 20
-    setTankFill(newTankFill)
+    TankFillValve.Close(20)
   }
   const LeftClickTankToPump = () => {
-    const newTankFill = TankToPump + 20 > 100 ? 100 : TankToPump + 20
-    setTankToPump(newTankFill)
+    TankToPumpValve.Open()
   }
   const RightClickTankToPump = () => {
-    const newTankFill = TankToPump - 20 < 0 ? 0 : TankToPump - 20
-    setTankToPump(newTankFill)
+    TankToPumpValve.Close()
   }
 
   return (
@@ -31,7 +26,7 @@ export default function Intake() {
       <Row>
         <Col>
           <Row>
-            <TankLevel TankContent={TankContent} />
+            <TankLevel tankContent={BoosterTank.Content} tankVolume={BoosterTank.Volume} />
           </Row>
           <Row>
             <IntakeConnection />
@@ -43,7 +38,7 @@ export default function Intake() {
             <ControlHandle
               Name="Tank fill"
               BorderColor="black"
-              Value={TankFill}
+              Value={TankFillValve.FlowRate}
               cbOnLeftClick={LeftClickTankFill}
               cbOnRightClick={RightClickTankFill}
             />
@@ -52,7 +47,7 @@ export default function Intake() {
             <ControlHandle
               Name="Tank to Pump"
               BorderColor="black"
-              Value={TankToPump}
+              Value={TankToPumpValve.isOpen ? 100 : 0}
               cbOnLeftClick={LeftClickTankToPump}
               cbOnRightClick={RightClickTankToPump}
             />
@@ -62,4 +57,6 @@ export default function Intake() {
 
     </div>
   )
-}
+})
+
+export default Intake

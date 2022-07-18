@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Row, Col } from 'reactstrap'
 import Discharge from './Discharge'
 import Intake from './Intake'
-import MasterGauge from './MasterGauge'
-import PumpControls from './PumpControls'
+import MasterGauge from '../Components/MasterGauge'
+import PumpControls from '../Components/PumpControls'
+import SimContext from '../SimContext'
 
 export default function PumpPanel() {
   const IntakePressure = 0
@@ -26,6 +27,8 @@ export default function PumpPanel() {
     }
     setPumpPressure(PumpPressure + change)
   }
+  const Sim = SimContext()
+  const { TankFillValve, TankToPumpValve, BoosterTank } = Sim
 
   return (
     <div>
@@ -64,6 +67,7 @@ export default function PumpPanel() {
         {/* Intake */}
         <Col>
           <Intake />
+          {/* TankFillValve={TankFillValve} TankToPumpValve={TankToPumpValve} BoosterTank={BoosterTank} /> */}
         </Col>
       </Row>
     </div>

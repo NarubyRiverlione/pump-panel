@@ -1,17 +1,24 @@
 import { Container, Row } from 'reactstrap'
 import './App.css'
-import PumpPanel from './PumpPanel'
+import { SimulatorProvider } from './SimContext'
+import Header from './Subpanel/Header'
+import PumpPanel from './Subpanel/PumpPanel'
 
 function App() {
   return (
+    <SimulatorProvider>
+      <Container fluid>
 
-    <Container fluid>
-      <Row>
-        <h1>Pump Panel</h1>
-      </Row>
-      <PumpPanel />
-    </Container>
+        <Row>
+          <Header />
+        </Row>
 
+        <Row>
+          <PumpPanel />
+        </Row>
+
+      </Container>
+    </SimulatorProvider>
   )
 }
 

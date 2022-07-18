@@ -1,14 +1,17 @@
-import React from 'react'
+import { observer } from 'mobx-react-lite'
 
 type PropsTypes = {
-  TankContent:number
+  tankContent: number
+  tankVolume:number
 }
 
-export default function TankLevel({ TankContent }:PropsTypes) {
-  const Level100 = TankContent === 100 ? 'DarkTurquoise' : 'DarkBlue'
-  const Level75 = TankContent > 75 ? 'LightGreen' : 'Green '
-  const Level50 = TankContent > 50 ? 'Yellow' : 'GoldenRod'
-  const Level25 = TankContent > 25 ? 'Red' : 'LightCoral'
+const TankLevel = observer(({ tankContent, tankVolume }:PropsTypes) => {
+  const BoosterPct = (tankContent / tankVolume) * 100
+
+  const Level100 = BoosterPct === 100 ? 'DarkTurquoise' : 'DarkBlue'
+  const Level75 = BoosterPct >= 75 ? 'LightGreen' : 'Green '
+  const Level50 = BoosterPct >= 50 ? 'Yellow' : 'GoldenRod'
+  const Level25 = BoosterPct >= 25 ? 'Red' : 'LightCoral'
   return (
     <div>
       <svg width={130} height={200}>
@@ -32,4 +35,6 @@ export default function TankLevel({ TankContent }:PropsTypes) {
       </svg>
     </div>
   )
-}
+})
+
+export default TankLevel
