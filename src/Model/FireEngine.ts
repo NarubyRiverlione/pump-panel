@@ -1,3 +1,6 @@
+import {
+  action, computed, makeObservable, observable,
+} from 'mobx'
 import Connection from './Components/Connection'
 import FlowValve from './Components/FlowValve'
 import Pump from './Components/Pump'
@@ -37,6 +40,30 @@ export default class FireEngine {
     this.ValveLine1 = new FlowValve(CstNames.DischargeValveLine1, this.EnginePump, CstEngine.Discharges.Line1.MaxFlow)
     this.ConnectionLine1 = new Connection(CstNames.DischargeConnectionLine1)
     this.ConnectionLine1.In = this.ValveLine1
+
+    makeObservable(this, {
+      Hydrant: observable,
+      IntakeConnection: observable,
+      BoosterTank: observable,
+      TankFillValve: observable,
+      TankToPumpValve: observable,
+      EnginePump: observable,
+      ValveLine1: observable,
+      ConnectionLine1: observable,
+
+      Thick: action,
+      Start: action,
+      Stop: action,
+
+      CreateHydrant: action,
+      ConnectHydrant: action,
+      DisconnectHydrant: action,
+      isHydrantConnected: computed,
+
+      ConnectLine1: action,
+      DisconnectLine1: action,
+
+    })
   }
 
   Thick() {
@@ -71,7 +98,9 @@ export default class FireEngine {
   DisconnectHydrant() {
     this.IntakeConnection.DisconnectInput()
   }
-
+  get isHydrantConnected() {
+    return this.IntakeConnection.In === this.Hydrant
+  }
   // ToDo: change to Connect(Item) / Disconnect(Item)
   ConnectLine1(line: Line) {
     this.ConnectionLine1.ConnectOutput(line)

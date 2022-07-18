@@ -5,7 +5,6 @@ const simulator = new FireEngine(0)
 const SimulatorContext = React.createContext<FireEngine>(simulator)
 simulator.Start()
 simulator.CreateHydrant()
-simulator.ConnectHydrant()
 
 type PropsTypes = {
   children:JSX.Element
