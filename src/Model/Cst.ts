@@ -20,7 +20,7 @@ export const CstEngine = {
   Discharges: {
     Line1: { MaxFlow: 200 },
   },
-  Pump: { MaxPressure: 50 },
+  Pump: { MaxPressure: 50, MaxRPM: 2000 },
 }
 export const CstSim = {
   Interval: 1000,

@@ -34,7 +34,7 @@ export default class FireEngine {
     this.TankFillValve = new FlowValve(CstNames.TankFillValve, this.IntakeConnection, CstEngine.IntakeValve.MaxFlow)
 
     this.TankToPumpValve = new Valve(CstNames.TankToPumpValve, this.BoosterTank)
-    this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure)
+    this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM)
     this.EnginePump.In = this.TankToPumpValve
 
     this.ValveLine1 = new FlowValve(CstNames.DischargeValveLine1, this.EnginePump, CstEngine.Discharges.Line1.MaxFlow)

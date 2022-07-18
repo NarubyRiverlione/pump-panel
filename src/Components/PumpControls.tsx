@@ -1,17 +1,19 @@
+import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Row, Col, Button } from 'reactstrap'
 import Display from 'seven-segment-display'
+import SimContext from '../SimContext'
 
-type PropsTypes = {
-  PumpReadout:number
-  PumpReadoutUnit:string
-  ChangePumpMode:(newMode:string)=>void
-  PumpIncDec:(change:number)=>void
-}
+const PumpControls = observer(() => {
+  const Sim = SimContext()
+  const { EnginePump } = Sim
+  const { isModePressure, Pressure, RPM } = EnginePump
 
-export default function PumpControls({
-  PumpReadout, PumpReadoutUnit, ChangePumpMode, PumpIncDec,
-}:PropsTypes) {
+  const PumpIncDec = (changeBy:number) => {
+    if (isModePressure) { EnginePump.setPressure(Pressure + changeBy); return }
+    EnginePump.setRPM(RPM + changeBy)
+  }
+
   return (
     <div>
       <Row><h4>Pump Controls</h4></Row>
@@ -22,7 +24,7 @@ export default function PumpControls({
             <Col>
               <div style={{ width: '100px' }}>
                 <Display
-                  value={PumpReadout}
+                  value={isModePressure ? Pressure : RPM}
                   digitCount={3}
                 />
               </div>
@@ -32,25 +34,22 @@ export default function PumpControls({
                 display: 'flex', justifyContent: 'left', alignItems: 'flex-end', fontWeight: 500,
               }}
               >
-                {PumpReadoutUnit}
+                {isModePressure ? 'Bar' : 'RPM'}
               </div>
             </Col>
           </Row>
-          <Row>
-            <Row>
-              <div style={{ fontWeight: 500, padding: '1em' }}>
-                Mode switch
-              </div>
-            </Row>
-            <Row>
-              <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-                <Button style={{ width: '100px' }} color="info" onClick={() => ChangePumpMode('RPM')}>RPM</Button>
-              </Row>
-              <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-                <Button style={{ width: '100px' }} color="info" onClick={() => ChangePumpMode('Bar')}>Pressure</Button>
-              </Row>
-            </Row>
+
+          <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+            <Button
+              style={{ width: '100px' }}
+              color="info"
+              onClick={() => EnginePump.Toggle()}
+            >
+              MODE
+
+            </Button>
           </Row>
+
         </Col>
 
         <Col>
@@ -77,4 +76,6 @@ export default function PumpControls({
       </Row>
     </div>
   )
-}
+})
+
+export default PumpControls
