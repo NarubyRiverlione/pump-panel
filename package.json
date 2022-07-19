@@ -13,7 +13,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test:coverage": "npm test -- --coverage",
-    "test:badges": "npm run test:coverage  && istanbul-badges-readme",
+    "test:badges": "npm run test:coverage  && npx istanbul-badges-readme",
     "test": "jest  --detectOpenHandles",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

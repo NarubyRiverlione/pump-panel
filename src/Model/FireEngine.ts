@@ -9,9 +9,29 @@ import {
 } from './Cst'
 import Line from './Line'
 
+// todo own Hydrant type so open / closing hydrant = pump max or off
+// todo random hydrant pressure / flow
+
+// todo tank fill not FlowValve but full open/close Valve ?
+// todo tank to pump FLowValve instead of valve  for recirculation ?
+
+// todo Radio /event system
+// - intake line takes time to lay
+// - call for "open hydrant"
+// - receive call "charge line X"
+
+// todo readout / UI
+// - intake pressure from hydrant to main intake gauge
+// - discharge flow
+// - discharge in use (nozzle open)
+// - total discharge flow ?
+
+// todo beter UI for tank level
+
+// todo pressure / flow loss in lines
+
 export default class FireEngine {
   // hydrant has pressure so needs to be a dummy pump
-  // todo own Hydrant type so open / closing hydrant = pump max or off
   Hydrant: Pump | undefined
 
   BoosterTank: Tank
@@ -61,7 +81,6 @@ export default class FireEngine {
     this.BoosterTank.AddThisStep = this.TankFillValve.Content
 
     // only discharge when output is connected
-    // const totalDischarge = this.DischargeConnections.Out ? this.DischargeValves.Content : 0
     let totalDischarge = 0
     this.DischargeConnections.forEach((discharge) => {
       totalDischarge += discharge.Out ? discharge.Content : 0
@@ -84,7 +103,6 @@ export default class FireEngine {
   }
 
   CreateHydrant() {
-    // Todo random hydrant volume
     const unlimitedSource = new Tank(CstNames.Hydrant, CstHydrant.Volume, CstHydrant.Volume)
     this.Hydrant = new Pump('Hydrant', CstHydrant.Pressure, CstHydrant.Pressure)
     this.Hydrant.In = unlimitedSource
@@ -103,7 +121,6 @@ export default class FireEngine {
     return this.IntakeConnection.In === this.Hydrant
   }
 
-  // ToDo: change to Connect(Item) / Disconnect(Item)
   ConnectLine(lineNr: number, line: Line) {
     this.DischargeConnections[lineNr - 1].ConnectOutput(line)
   }

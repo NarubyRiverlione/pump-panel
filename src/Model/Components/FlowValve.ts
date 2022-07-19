@@ -1,7 +1,7 @@
 import {
   makeObservable, observable, action, computed,
 } from 'mobx'
-import { parse } from 'path'
+
 import Item from './Item'
 import { ValveInterface } from './Valve'
 
