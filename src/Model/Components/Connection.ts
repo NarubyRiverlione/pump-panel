@@ -1,4 +1,6 @@
-import { action, makeObservable, observable } from 'mobx'
+import {
+  action, computed, makeObservable, observable,
+} from 'mobx'
 import Item from './Item'
 
 export default class Connection implements Item {
@@ -15,7 +17,7 @@ export default class Connection implements Item {
     makeObservable(this, {
       In: observable,
       Out: observable,
-      Pressure: observable,
+      Pressure: computed,
       ConnectInput: action,
       DisconnectInput: action,
       ConnectOutput: action,
@@ -41,7 +43,6 @@ export default class Connection implements Item {
     return this.In ? this.In.Content : 0
   }
   get Pressure() {
-    // todo  pressure in connection via valve from pump
-    return this.Content
+    return this.In ? this.In.Pressure ?? 0 : 0
   }
 }

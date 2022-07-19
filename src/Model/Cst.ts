@@ -23,7 +23,7 @@ export const CstEngine = {
     [`${CstNames.DischargeValveLine} 3`]: { MaxFlow: 200 },
     [`${CstNames.DischargeValveLine} 4`]: { MaxFlow: 500 },
   },
-  Pump: { MaxPressure: 50, MaxRPM: 2000 },
+  Pump: { MaxPressure: 50.0, MaxRPM: 2000 },
 }
 export const CstSim = {
   Interval: 1000,
@@ -32,4 +32,5 @@ export const CstHydrant = {
   // ToDo: make hydrant flow rate random
   MaxFlow: 100,
   Volume: 1e6,
+  Pressure: 10.0,
 }

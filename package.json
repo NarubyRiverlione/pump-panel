@@ -16,7 +16,8 @@
     "test:badges": "npm run test:coverage  && istanbul-badges-readme",
     "test": "jest  --detectOpenHandles",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "tsc": "tsc -w"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",

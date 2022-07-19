@@ -10,7 +10,9 @@ import {
 import Line from './Line'
 
 export default class FireEngine {
-  Hydrant: Tank | null
+  // hydrant has pressure so needs to be a dummy pump
+  // todo own Hydrant type so open / closing hydrant = pump max or off
+  Hydrant: Pump | undefined
 
   BoosterTank: Tank
   TankFillValve: FlowValve
@@ -25,7 +27,7 @@ export default class FireEngine {
   Running?: NodeJS.Timeout // ref setInterval
 
   constructor(BoosterTankContent = 0) {
-    this.Hydrant = null
+    this.Hydrant = undefined
 
     this.IntakeConnection = new Connection(CstNames.IntakeConnection)
     this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
@@ -46,10 +48,11 @@ export default class FireEngine {
   }
 
   SetupDischarge(lineNr: number) {
+    // make Flow valve for discharge
     const name = `${CstNames.DischargeValveLine} ${lineNr}`
     const maxFlow = CstEngine.Discharges[name].MaxFlow
     this.DischargeValves.push(new FlowValve(name, this.EnginePump, maxFlow))
-
+    // connect flow valve with discharge connector as input
     this.DischargeConnections.push(new Connection(CstNames.DischargeConnectionLine))
     this.DischargeConnections[lineNr - 1].In = this.DischargeValves[lineNr - 1]
   }
@@ -82,15 +85,21 @@ export default class FireEngine {
 
   CreateHydrant() {
     // Todo random hydrant volume
-    this.Hydrant = new Tank(CstNames.Hydrant, CstHydrant.Volume, CstHydrant.Volume)
+    const unlimitedSource = new Tank(CstNames.Hydrant, CstHydrant.Volume, CstHydrant.Volume)
+    this.Hydrant = new Pump('Hydrant', CstHydrant.Pressure, CstHydrant.Pressure)
+    this.Hydrant.In = unlimitedSource
+    this.Hydrant.Toggle() // put dummy pump in  pressure mode
+    this.Hydrant.setPressure(CstHydrant.Pressure)
   }
   ConnectHydrant() {
+    if (!this.Hydrant) return // no hydrant available = always not connected
     this.IntakeConnection.ConnectInput(this.Hydrant)
   }
   DisconnectHydrant() {
     this.IntakeConnection.DisconnectInput()
   }
   get isHydrantConnected() {
+    if (!this.Hydrant) return false // no hydrant available = always not connected
     return this.IntakeConnection.In === this.Hydrant
   }
 

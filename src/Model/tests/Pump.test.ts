@@ -40,6 +40,11 @@ describe('Pump init', () => {
     testPump.setRPM(maxRPM + 23)
     expect(testPump.RPM).toBe(maxRPM)
   })
+  it('Prevent negative RPM', () => {
+    const testPump = new Pump('test pump', maxPressure, maxRPM)
+    testPump.setRPM(-1)
+    expect(testPump.RPM).toBe(0)
+  })
   it('Pump has input content', () => {
     const mockTank = new MockTank('mock tank', 100, 56)
     const testPump = new Pump('test pump', maxPressure, maxRPM)

@@ -1,7 +1,17 @@
 import { makeAutoObservable } from 'mobx'
 import Item from './Item'
 
-export default class Pump implements Item {
+export interface PumpInterface extends Item {
+  Name: string
+  Pressure: number
+  readonly MaxPressure: number
+  RPM: number
+  readonly MaxRPM: number
+  In: Item | null
+  isModePressure: boolean
+}
+
+export default class Pump implements PumpInterface {
   Name: string
   Pressure: number
   readonly MaxPressure: number

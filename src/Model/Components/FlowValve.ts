@@ -1,6 +1,7 @@
 import {
   makeObservable, observable, action, computed,
 } from 'mobx'
+import { parse } from 'path'
 import Item from './Item'
 import { ValveInterface } from './Valve'
 
@@ -26,6 +27,7 @@ export default class FlowValve implements ValveInterface {
       Open: action,
       Close: action,
       Content: computed,
+      Pressure: computed,
     })
   }
 
@@ -39,9 +41,18 @@ export default class FlowValve implements ValveInterface {
   }
 
   get Content() {
-    const calcFlow = (this.Volume / 100) * this.FlowRate
+    // no flow without pressure
+    if (this.Pressure === 0) return 0
+
+    const calcFlow = (this.Volume / 100.0) * this.FlowRate
     // limit to source content
     const flow = this.Source.Content >= calcFlow ? calcFlow : this.Source.Content
     return flow
+  }
+
+  get Pressure() {
+    if (!this.Source || !this.Source.Pressure) return 0
+
+    return (this.Source.Pressure / 100.0) * this.FlowRate
   }
 }

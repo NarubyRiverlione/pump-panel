@@ -10,7 +10,7 @@ describe('Connection', () => {
     expect(conn.Pressure).toBe(0)
   })
 
-  it('Connection with tank as input has tank as content', () => {
+  it('Connection with tank as input has tank as content, no pressure (tank is unpressured)', () => {
     const mockVolume = 1235
     const mockTankContent = 568
     const mockTank = new MockTank('mock tank', mockVolume, mockTankContent)
@@ -18,6 +18,7 @@ describe('Connection', () => {
     const conn = new Connection('Test connection')
     conn.ConnectInput(mockTank)
     expect(conn.Content).toBe(mockTank.Content)
+    expect(conn.Pressure).toBe(0)
     expect(conn.In).toMatchObject(mockTank)
     expect(conn.Out).toBeNull()
   })
