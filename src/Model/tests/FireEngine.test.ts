@@ -38,11 +38,11 @@ describe('Fire engine init', () => {
     expect(IntakeConnection.In).toBeNull()
     expect(IntakeConnection.Content).toBe(0)
   })
-  test('Discharge Connection has no output', () => {
+  test('Discharge Connections have no output', () => {
     const testFireEngine = new FireEngine()
-    const { ConnectionLine1 } = testFireEngine
-    expect(ConnectionLine1.Out).toBeNull()
-    expect(ConnectionLine1.Content).toBe(0)
+    const { DischargeConnections } = testFireEngine
+    expect(DischargeConnections[0].Out).toBeNull()
+    expect(DischargeConnections[0].Content).toBe(0)
   })
   test('Pump to tank valve is closed', () => {
     const testFireEngine = new FireEngine()
@@ -154,19 +154,19 @@ describe('Fill booster tank', () => {
   })
 })
 
-describe('Discharge connection', () => {
+describe('Discharge connections', () => {
   it('Connect Line 1 to discharge', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.ConnectLine1(new Line(CstNames.Line1))
-    const { ConnectionLine1 } = testFireEngine
-    expect(ConnectionLine1.Out?.Name).toBe(CstNames.Line1)
+    testFireEngine.ConnectLine(1, new Line(CstNames.Line))
+    const { DischargeConnections } = testFireEngine
+    expect(DischargeConnections[0].Out?.Name).toBe(CstNames.Line)
   })
   it('Disconnect Line 1 from discharge', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.ConnectLine1(new Line('test line'))
-    testFireEngine.DisconnectLine1()
-    const { ConnectionLine1 } = testFireEngine
-    expect(ConnectionLine1.Out).toBeNull()
+    testFireEngine.ConnectLine(1, new Line('test line'))
+    testFireEngine.DisconnectLine(1)
+    const { DischargeConnections } = testFireEngine
+    expect(DischargeConnections[1].Out).toBeNull()
   })
 })
 
@@ -174,31 +174,33 @@ describe('Discharging - using Line 1', () => {
   it('Discharge connection has no content when discharge valve is closed', () => {
     const startBooster = 1000
     const testFireEngine = new FireEngine(startBooster)
-    const { ConnectionLine1, ValveLine1, BoosterTank } = testFireEngine
+    const { DischargeConnections, DischargeValves, BoosterTank } = testFireEngine
     testFireEngine.Thick()
-    expect(ValveLine1.Content).toBe(0)
-    expect(ConnectionLine1.Content).toBe(0)
+    expect(DischargeValves[0].Content).toBe(0)
+    expect(DischargeConnections[0].Content).toBe(0)
     expect(BoosterTank.Content).toBe(startBooster)
   })
   it('Discharge connection has booster tank content when discharge & tank to pump valves are open', () => {
     const startBooster = 1000
     const openDischarge = 25
+    const lineNr = 3
     const testFireEngine = new FireEngine(startBooster)
-    const { ConnectionLine1, ValveLine1, TankToPumpValve } = testFireEngine
+    const { DischargeConnections, DischargeValves, TankToPumpValve } = testFireEngine
 
-    ValveLine1.Open(openDischarge)
+    testFireEngine.OpenDischarge(lineNr, openDischarge)
     TankToPumpValve.Open()
-    expect(ValveLine1.Content).toBe(calcFlow(openDischarge))
-    expect(ConnectionLine1.Content).toBe(calcFlow(openDischarge))
+    expect(DischargeValves[lineNr - 1].Content).toBe(calcFlow(openDischarge))
+    expect(DischargeConnections[lineNr - 1].Content).toBe(calcFlow(openDischarge))
   })
   it('Booster tank is not drained when no output is connected to Discharge', () => {
     const startBooster = 1000
     const openDischarge = 25
+    const lineNr = 4
     const testFireEngine = new FireEngine(startBooster)
-    const { ConnectionLine1, ValveLine1, BoosterTank } = testFireEngine
+    const { DischargeConnections, BoosterTank } = testFireEngine
 
-    ValveLine1.Open(openDischarge)
-    expect(ConnectionLine1.Out).toBeNull()
+    testFireEngine.OpenDischarge(lineNr, openDischarge)
+    expect(DischargeConnections[lineNr - 1].Out).toBeNull()
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(startBooster)
   })
@@ -206,11 +208,12 @@ describe('Discharging - using Line 1', () => {
   it('Booster tank is drained when output is connected to Discharge', () => {
     const startBooster = 1000
     const openDischarge = 25
+    const lineNr = 1
     const testFireEngine = new FireEngine(startBooster)
-    const { ValveLine1, BoosterTank, TankToPumpValve } = testFireEngine
+    const { BoosterTank, TankToPumpValve } = testFireEngine
 
-    testFireEngine.ConnectLine1(new Line('test line'))
-    ValveLine1.Open(openDischarge)
+    testFireEngine.ConnectLine(lineNr, new Line('test line'))
+    testFireEngine.OpenDischarge(lineNr, openDischarge)
     TankToPumpValve.Open()
 
     testFireEngine.Thick()
@@ -221,24 +224,25 @@ describe('Discharging - using Line 1', () => {
   it('Drain  Booster tank  until empty = empty Connection Line 1', () => {
     const startBooster = 180
     const openDischarge = 100 // = drain maxFlow = 200
+    const lineNr = 2
     const testFireEngine = new FireEngine(startBooster)
     const {
-      ValveLine1, BoosterTank, ConnectionLine1, TankToPumpValve,
+      DischargeValves, BoosterTank, DischargeConnections, TankToPumpValve,
     } = testFireEngine
 
-    testFireEngine.ConnectLine1(new Line('test line'))
-    ValveLine1.Open(openDischarge)
+    testFireEngine.ConnectLine(lineNr, new Line('test line'))
+    testFireEngine.OpenDischarge(lineNr, openDischarge)
     TankToPumpValve.Open()
-    expect(ValveLine1.Content).toBe(startBooster)
+    expect(DischargeValves[lineNr - 1].Content).toBe(startBooster)
 
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(0)
-    expect(ValveLine1.Content).toBe(0)
-    expect(ConnectionLine1.Out?.Content).toBe(0)
+    expect(DischargeValves[lineNr - 1].Content).toBe(0)
+    expect(DischargeConnections[lineNr - 1].Out?.Content).toBe(0)
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(0)
-    expect(ValveLine1.Content).toBe(0)
-    expect(ConnectionLine1.Out?.Content).toBe(0)
+    expect(DischargeValves[lineNr - 1].Content).toBe(0)
+    expect(DischargeConnections[lineNr - 1].Out?.Content).toBe(0)
   })
 })
 

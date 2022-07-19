@@ -3,9 +3,9 @@ export const CstNames = {
   IntakeConnection: 'Intake connection',
   TankFillValve: 'Tank Fill',
   Hydrant: 'Hydrant',
-  DischargeValveLine1: 'Discharge valve 1',
-  DischargeConnectionLine1: 'Discharge 1',
-  Line1: 'Line 1',
+  DischargeValveLine: 'Discharge valve',
+  DischargeConnectionLine: 'Discharge',
+  Line: 'Line',
   Pump: 'Pump',
   TankToPumpValve: 'Tank to pump',
 }
@@ -18,7 +18,10 @@ export const CstEngine = {
     MaxFlow: 100,
   },
   Discharges: {
-    Line1: { MaxFlow: 200 },
+    [`${CstNames.DischargeValveLine} 1`]: { MaxFlow: 200 },
+    [`${CstNames.DischargeValveLine} 2`]: { MaxFlow: 200 },
+    [`${CstNames.DischargeValveLine} 3`]: { MaxFlow: 200 },
+    [`${CstNames.DischargeValveLine} 4`]: { MaxFlow: 500 },
   },
   Pump: { MaxPressure: 50, MaxRPM: 2000 },
 }

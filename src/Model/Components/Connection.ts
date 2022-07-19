@@ -15,6 +15,7 @@ export default class Connection implements Item {
     makeObservable(this, {
       In: observable,
       Out: observable,
+      Pressure: observable,
       ConnectInput: action,
       DisconnectInput: action,
       ConnectOutput: action,
@@ -38,5 +39,9 @@ export default class Connection implements Item {
 
   get Content() {
     return this.In ? this.In.Content : 0
+  }
+  get Pressure() {
+    // todo  pressure in connection via valve from pump
+    return this.Content
   }
 }

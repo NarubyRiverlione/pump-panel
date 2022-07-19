@@ -1,6 +1,4 @@
-import {
-  action, computed, makeObservable, observable,
-} from 'mobx'
+import { makeAutoObservable } from 'mobx'
 import Connection from './Components/Connection'
 import FlowValve from './Components/FlowValve'
 import Pump from './Components/Pump'
@@ -18,8 +16,8 @@ export default class FireEngine {
   TankFillValve: FlowValve
   IntakeConnection: Connection
 
-  ValveLine1: FlowValve
-  ConnectionLine1: Connection
+  DischargeValves: FlowValve[]
+  DischargeConnections: Connection[]
 
   EnginePump: Pump
   TankToPumpValve: Valve
@@ -37,40 +35,34 @@ export default class FireEngine {
     this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM)
     this.EnginePump.In = this.TankToPumpValve
 
-    this.ValveLine1 = new FlowValve(CstNames.DischargeValveLine1, this.EnginePump, CstEngine.Discharges.Line1.MaxFlow)
-    this.ConnectionLine1 = new Connection(CstNames.DischargeConnectionLine1)
-    this.ConnectionLine1.In = this.ValveLine1
+    this.DischargeValves = new Array<FlowValve>()
+    this.DischargeConnections = new Array<Connection>()
+    this.SetupDischarge(1)
+    this.SetupDischarge(2)
+    this.SetupDischarge(3)
+    this.SetupDischarge(4)
 
-    makeObservable(this, {
-      Hydrant: observable,
-      IntakeConnection: observable,
-      BoosterTank: observable,
-      TankFillValve: observable,
-      TankToPumpValve: observable,
-      EnginePump: observable,
-      ValveLine1: observable,
-      ConnectionLine1: observable,
+    makeAutoObservable(this)
+  }
 
-      Thick: action,
-      Start: action,
-      Stop: action,
+  SetupDischarge(lineNr: number) {
+    const name = `${CstNames.DischargeValveLine} ${lineNr}`
+    const maxFlow = CstEngine.Discharges[name].MaxFlow
+    this.DischargeValves.push(new FlowValve(name, this.EnginePump, maxFlow))
 
-      CreateHydrant: action,
-      ConnectHydrant: action,
-      DisconnectHydrant: action,
-      isHydrantConnected: computed,
-
-      ConnectLine1: action,
-      DisconnectLine1: action,
-
-    })
+    this.DischargeConnections.push(new Connection(CstNames.DischargeConnectionLine))
+    this.DischargeConnections[lineNr - 1].In = this.DischargeValves[lineNr - 1]
   }
 
   Thick() {
     this.BoosterTank.AddThisStep = this.TankFillValve.Content
 
     // only discharge when output is connected
-    const totalDischarge = this.ConnectionLine1.Out ? this.ValveLine1.Content : 0
+    // const totalDischarge = this.DischargeConnections.Out ? this.DischargeValves.Content : 0
+    let totalDischarge = 0
+    this.DischargeConnections.forEach((discharge) => {
+      totalDischarge += discharge.Out ? discharge.Content : 0
+    })
     this.BoosterTank.RemoveThisStep = totalDischarge
     this.BoosterTank.Thick()
   }
@@ -101,11 +93,19 @@ export default class FireEngine {
   get isHydrantConnected() {
     return this.IntakeConnection.In === this.Hydrant
   }
+
   // ToDo: change to Connect(Item) / Disconnect(Item)
-  ConnectLine1(line: Line) {
-    this.ConnectionLine1.ConnectOutput(line)
+  ConnectLine(lineNr: number, line: Line) {
+    this.DischargeConnections[lineNr - 1].ConnectOutput(line)
   }
-  DisconnectLine1() {
-    this.ConnectionLine1.DisconnectOutput()
+  DisconnectLine(lineNr: number) {
+    this.DischargeConnections[lineNr - 1].DisconnectOutput()
+  }
+
+  OpenDischarge(lineNr: number, openBy: number) {
+    this.DischargeValves[lineNr - 1].Open(openBy)
+  }
+  CloseDischarge(lineNr: number, closeBy: number) {
+    this.DischargeValves[lineNr - 1].Close(closeBy)
   }
 }

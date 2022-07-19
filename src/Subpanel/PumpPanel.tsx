@@ -13,14 +13,6 @@ const PumpPanel = observer(() => {
 
   const IntakePressure = 0
 
-  const [DischargePressures, setDischarges] = useState([0, 0, 0, 0])
-
-  const changedDischarge = (dischargeSetpoint:number, dischargeLine:number) => {
-    const newDischarges = [...DischargePressures]
-    newDischarges[dischargeLine - 1] = (Pressure / 100) * dischargeSetpoint
-    setDischarges(newDischarges)
-  }
-
   return (
     <div>
       {/* Master  */}
@@ -38,16 +30,16 @@ const PumpPanel = observer(() => {
       {/* Discharges */}
       <Row style={{ paddingTop: '1em' }}>
         <Col md={2}>
-          <Discharge dischargeNumber={1} pressure={DischargePressures[0]} color="yellow" changedDischarge={changedDischarge} />
+          <Discharge dischargeNumber={1} color="yellow" />
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={2} pressure={DischargePressures[1]} color="blue" changedDischarge={changedDischarge} />
+          <Discharge dischargeNumber={2} color="blue" />
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={3} pressure={DischargePressures[2]} color="red" changedDischarge={changedDischarge} />
+          <Discharge dischargeNumber={3} color="red" />
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={4} pressure={DischargePressures[3]} color="green" changedDischarge={changedDischarge} />
+          <Discharge dischargeNumber={4} color="green" />
         </Col>
 
         {/* Intake */}

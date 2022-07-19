@@ -2,11 +2,12 @@ import Connection from '../../Components/Connection'
 import MockTank from '../mocks/MockTank'
 
 describe('Connection', () => {
-  it('Connection has default no input nor output', () => {
+  it('Connection has default no input nor output = no pressure', () => {
     const conn = new Connection('Test connection')
     expect(conn.In).toBeNull()
     expect(conn.Out).toBeNull()
     expect(conn.Content).toBe(0)
+    expect(conn.Pressure).toBe(0)
   })
 
   it('Connection with tank as input has tank as content', () => {

@@ -1,29 +1,32 @@
-import React, { useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { Row } from 'reactstrap'
 import ControlHandle from '../Components/ControlHandle'
 // eslint-disable-next-line import/extensions
 import ReactRadialGauge from '../Components/Gauge/RadialGauge'
+import SimContext from '../SimContext'
 
 type PropsTypes = {
   dischargeNumber :number
-  pressure:number
   color:string
-  changedDischarge:(newDischarge:number, dischargeNumber:number)=>void
 }
-export default function Discharge({
-  dischargeNumber, pressure, color, changedDischarge,
-}:PropsTypes) {
-  const [discharge, setDischarge] = useState(0)
+const Discharge = observer(({ dischargeNumber, color }:PropsTypes) => {
+  const Sim = SimContext()
+  const { DischargeValves, DischargeConnections } = Sim
 
   const LeftClick = () => {
-    const newDischarge = discharge + 10 > 100 ? 100 : discharge + 10
-    setDischarge(newDischarge)
-    changedDischarge(newDischarge, dischargeNumber)
+    const openBy = 10
+    // const dischargeFlowRate = DischargeValves[dischargeNumber - 1].FlowRate
+    // const newDischarge = dischargeFlowRate + openBy > 100 ? 100 : dischargeFlowRate + openBy
+    // setDischarge(newDischarge)
+    // changedDischarge(newDischarge, dischargeNumber)
+    Sim.OpenDischarge(dischargeNumber, openBy)
   }
   const RightClick = () => {
-    const newDischarge = discharge - 10 < 0 ? 0 : discharge - 10
-    setDischarge(newDischarge)
-    changedDischarge(newDischarge, dischargeNumber)
+    const closeBy = 10
+    // const newDischarge = discharge - 10 < 0 ? 0 : discharge - 10
+    // setDischarge(newDischarge)
+    // changedDischarge(newDischarge, dischargeNumber)
+    Sim.CloseDischarge(dischargeNumber, closeBy)
   }
   return (
     <div style={{
@@ -35,7 +38,7 @@ export default function Discharge({
         <ReactRadialGauge
           units="bar"
           title="Pressure"
-          value={pressure}
+          value={DischargeConnections[dischargeNumber - 1].Pressure}
           minValue={0}
           maxValue={50}
           // width={300}
@@ -59,7 +62,7 @@ export default function Discharge({
           <ControlHandle
             Name={`Discharge ${dischargeNumber}`}
             BorderColor={color}
-            Value={discharge}
+            Value={DischargeValves[dischargeNumber - 1].FlowRate}
             cbOnLeftClick={LeftClick}
             cbOnRightClick={RightClick}
           />
@@ -67,4 +70,6 @@ export default function Discharge({
       </Row>
     </div>
   )
-}
+})
+
+export default Discharge
