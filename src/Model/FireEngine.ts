@@ -12,9 +12,6 @@ import Line from './Line'
 // todo own Hydrant type so open / closing hydrant = pump max or off
 // todo random hydrant pressure / flow
 
-// todo tank fill not FlowValve but full open/close Valve ?
-// todo tank to pump FLowValve instead of valve  for recirculation ?
-
 // todo Radio /event system
 // - intake line takes time to lay
 // - call for "open hydrant"
