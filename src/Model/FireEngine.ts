@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx'
-import { mainModule } from 'process'
 import Connection from './Components/Connection'
 import FlowValve from './Components/FlowValve'
 import Manifold from './Components/ManiFold'

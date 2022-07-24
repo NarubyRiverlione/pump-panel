@@ -9,10 +9,10 @@ const Intake = observer(() => {
   const Sim = SimContext()
   const { TankFillValve, TankToPumpValve, BoosterTank } = Sim
   const LeftClickTankFill = () => {
-    TankFillValve.Open(20)
+    TankFillValve.Open()
   }
   const RightClickTankFill = () => {
-    TankFillValve.Close(20)
+    TankFillValve.Close()
   }
   const LeftClickTankToPump = () => {
     TankToPumpValve.Open()
@@ -38,7 +38,7 @@ const Intake = observer(() => {
             <ControlHandle
               Name="Tank fill"
               BorderColor="black"
-              Value={TankFillValve.FlowRate}
+              Value={TankFillValve.isOpen ? 100 : 0}
               cbOnLeftClick={LeftClickTankFill}
               cbOnRightClick={RightClickTankFill}
             />

@@ -1,7 +1,4 @@
-import {
-  action, makeObservable, observable,
-} from 'mobx'
-import AlarmSystem from '../Systems/AlarmSystem'
+import { makeAutoObservable } from 'mobx'
 import Item from './Item'
 
 export interface TankInterface extends Item {
@@ -20,10 +17,6 @@ export default class Tank implements TankInterface {
   AddThisStep: number
   RemoveThisStep: number
   ReadoutConsumption: number
-  AlarmSystem?: AlarmSystem
-  LowLevelAlarmCode: number
-  LowLevelAlarm: number
-  EmptyAlarmCode: number
 
   constructor(Name: string, Volume: number, StartContent = 0.0) {
     this.Name = Name
@@ -34,22 +27,7 @@ export default class Tank implements TankInterface {
     this.RemoveThisStep = 0.0
     this.ReadoutConsumption = 0.0
 
-    this.AlarmSystem = undefined
-    this.LowLevelAlarmCode = 0
-    this.LowLevelAlarm = 0
-    this.EmptyAlarmCode = 0
-
-    // Tank is Super class for Handpump and can't use makeAutoObservable
-    makeObservable(this, {
-      Inside: observable,
-      Volume: observable,
-      Name: observable,
-      AddThisStep: observable,
-      RemoveThisStep: observable,
-      Add: action,
-      Remove: action,
-      Thick: action,
-    })
+    makeAutoObservable(this)
   }
 
   get Content() {
@@ -79,38 +57,9 @@ export default class Tank implements TankInterface {
     this.RemoveThisStep = 0
   }
 
-  CheckAlarmLevels() {
-    if (!this.AlarmSystem) return
-    const AlarmSys = this.AlarmSystem as AlarmSystem // null/undefiled safe
-    // Low Level alarm
-    if (this.LowLevelAlarmCode !== 0) {
-      // Raise if content below LowLevelAlarm
-      if (this.Content < this.LowLevelAlarm) {
-        AlarmSys.AddAlarm(this.LowLevelAlarmCode)
-      }
-      // cancel alarm is previous raised and now above LowLevelAlarm
-      if (AlarmSys.AlarmExist(this.LowLevelAlarmCode) && this.Content >= this.LowLevelAlarm) {
-        AlarmSys.RemoveAlarm(this.LowLevelAlarmCode)
-      }
-    }
-
-    // Empty alarm
-    if (this.EmptyAlarmCode !== 0) {
-      // Raise if tank is empty
-      if (this.Content === 0) {
-        AlarmSys.AddAlarm(this.EmptyAlarmCode)
-      }
-      // cancel alarm is previous raised and tank is no longer empty
-      if (AlarmSys.AlarmExist(this.EmptyAlarmCode) && this.Content !== 0) {
-        AlarmSys.RemoveAlarm(this.EmptyAlarmCode)
-      }
-    }
-  }
-
   Thick() {
     this.Add()
     this.Remove()
-    this.CheckAlarmLevels()
 
     /* istanbul ignore if  */
     if (this.RemoveThisStep < 0) {

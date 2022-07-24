@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Row, Col } from 'reactstrap'
 import { observer } from 'mobx-react-lite'
 import Discharge from './Discharge'
