@@ -7,8 +7,8 @@ describe('Manifold init', () => {
     const testManifold = new Manifold('test')
     expect(testManifold.Inputs).toBeDefined()
     expect(testManifold.Inputs.length).toBe(0)
-    expect(testManifold.Outputs).toBeDefined()
-    expect(testManifold.Outputs.length).toBe(0)
+    // expect(testManifold.Outputs).toBeDefined()
+    // expect(testManifold.Outputs.length).toBe(0)
 
     expect(testManifold.Content).toBe(0)
     expect(testManifold.Pressure).toBe(0)
@@ -22,13 +22,13 @@ describe('Add in & outputs', () => {
     expect(testManifold.Inputs.length).toBe(1)
     expect(testManifold.Inputs[0]).toMatchObject(testIn)
   })
-  it('Add output', () => {
-    const testManifold = new Manifold('test')
-    const testOut = new MockTank('test out', 100)
-    testManifold.AddOutput(testOut)
-    expect(testManifold.Outputs.length).toBe(1)
-    expect(testManifold.Outputs[0]).toMatchObject(testOut)
-  })
+  // it('Add output', () => {
+  //   const testManifold = new Manifold('test')
+  //   const testOut = new MockTank('test out', 100)
+  //   testManifold.AddOutput(testOut)
+  //   expect(testManifold.Outputs.length).toBe(1)
+  //   expect(testManifold.Outputs[0]).toMatchObject(testOut)
+  // })
 })
 
 describe('Content', () => {

@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import { CstEngine, CstNames, CstSim } from '../Cst'
+import {
+  CstEngine, CstHydrant, CstNames, CstSim,
+} from '../Cst'
 import FireEngine from '../FireEngine'
 import Line from '../Line'
 import { calcFlow, calcPressure } from './Components/FlowValve.test'
@@ -25,12 +27,20 @@ describe('Fire engine init', () => {
     engineWithContent.Thick()
     expect(engineWithContent.BoosterTank.Content).toBe(startContent)
   })
-  test('Has a tank fill valve that is connected to the Intake Connection', () => {
+  test('Has a "tank fill" valve that is input from the Intake manifold', () => {
     const testFireEngine = new FireEngine()
-    const { TankFillValve } = testFireEngine
+    const { TankFillValve, IntakeManifold } = testFireEngine
     expect(TankFillValve).not.toBeNull()
     expect(TankFillValve.Content).toBe(0)
-    expect(TankFillValve.Source.Name).toBe(CstNames.IntakeConnection)
+    expect(TankFillValve.Source).toMatchObject(IntakeManifold)
+  })
+  test('Has a "tank to pump" valve that output to the Intake manifold', () => {
+    const testFireEngine = new FireEngine()
+    const { TankToPumpValve, IntakeManifold, BoosterTank } = testFireEngine
+    expect(TankToPumpValve).not.toBeNull()
+    expect(TankToPumpValve.Content).toBe(0)
+    expect(TankToPumpValve.Source).toMatchObject(BoosterTank)
+    expect(IntakeManifold.Inputs[1]).toMatchObject(TankToPumpValve)
   })
 
   test('Intake Connection has no input', () => {
@@ -50,11 +60,17 @@ describe('Fire engine init', () => {
     const testFireEngine = new FireEngine()
     expect(testFireEngine.TankToPumpValve.isOpen).toBeFalsy()
   })
-  test('Pump has no content, input is tank to pump valve', () => {
+  test('Intake manifold has "tank to pump" and intake connections as inputs', () => {
     const testFireEngine = new FireEngine()
-    const { TankToPumpValve, EnginePump } = testFireEngine
+    const { IntakeManifold, IntakeConnection, TankToPumpValve } = testFireEngine
+    expect(IntakeManifold.Inputs[0]).toMatchObject(IntakeConnection)
+    expect(IntakeManifold.Inputs[1]).toMatchObject(TankToPumpValve)
+  })
+  test('Pump has no content, input is intake manifold', () => {
+    const testFireEngine = new FireEngine()
+    const { IntakeManifold, EnginePump } = testFireEngine
     expect(EnginePump.Content).toBe(0)
-    expect(EnginePump.In).toMatchObject(TankToPumpValve)
+    expect(EnginePump.In).toMatchObject(IntakeManifold)
   })
 })
 
@@ -69,11 +85,12 @@ describe('Hydrant', () => {
     testFireEngine.CreateHydrant()
     const { Hydrant } = testFireEngine
     expect(Hydrant?.Name).toBe(CstNames.Hydrant)
+    expect(Hydrant?.Content).toBe(CstHydrant.Volume)
   })
 })
 
 describe('Intake connection', () => {
-  test('Connect to hydrant = Intake has hydrant content', () => {
+  test('Connect to hydrant = Intake connection has hydrant content', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
@@ -113,29 +130,28 @@ describe('Fill booster tank', () => {
     testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
 
-    const openBy = 10
-    TankFillValve.Open(openBy)
+    TankFillValve.Open()
+    expect(TankFillValve.Content).toBe(CstEngine.TankFillValve.MaxFlow)
+    testFireEngine.Thick()
+    expect(BoosterTank.Content).toBe(CstEngine.TankFillValve.MaxFlow)
 
     testFireEngine.Thick()
-    expect(BoosterTank.Content).toBe(openBy)
-
-    testFireEngine.Thick()
-    expect(BoosterTank.Content).toBe(openBy * 2)
+    expect(BoosterTank.Content).toBe(CstEngine.TankFillValve.MaxFlow * 2)
   })
 
-  it('Open tank fill valve more = fill booster tank faster each Thick', () => {
+  it.skip('Open tank fill valve more = fill booster tank faster each Thick', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
     const { BoosterTank, TankFillValve } = testFireEngine
     const startOpenBy = 10
-    TankFillValve.Open(startOpenBy)
+    TankFillValve.Open()
 
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(startOpenBy)
 
     const openMore = 15
-    TankFillValve.Open(openMore)
+    TankFillValve.Open()
     const newAdd = startOpenBy + openMore
     testFireEngine.Thick()
     expect(TankFillValve.Content).toBe(newAdd)
@@ -145,19 +161,19 @@ describe('Fill booster tank', () => {
     expect(BoosterTank.Content).toBe(startOpenBy + newAdd * 2)
   })
 
-  it('Close the opened tank fill valve a bit = fill booster tank slower each Thick', () => {
+  it.skip('Close the opened tank fill valve a bit = fill booster tank slower each Thick', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
     const { BoosterTank, TankFillValve } = testFireEngine
     const startOpenBy = 10
-    TankFillValve.Open(startOpenBy)
+    TankFillValve.Open()
 
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(startOpenBy)
 
     const openLess = 2
-    TankFillValve.Close(openLess)
+    TankFillValve.Close()
     const newAdd = startOpenBy - openLess
     testFireEngine.Thick()
     expect(TankFillValve.Content).toBe(newAdd)
@@ -333,6 +349,13 @@ describe('Pump', () => {
     TankToPumpValve.Open()
     TankToPumpValve.Close()
     expect(EnginePump.Content).toBe(0)
+  })
+  it('Connected hydrant -> Pump has content', () => {
+    const testFireEngine = new FireEngine()
+    testFireEngine.CreateHydrant()
+    testFireEngine.ConnectHydrant()
+    const { Hydrant, EnginePump } = testFireEngine
+    expect(EnginePump.Content).toBe(Hydrant?.Content)
   })
 })
 

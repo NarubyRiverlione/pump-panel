@@ -1,7 +1,8 @@
 export const CstNames = {
   BoosterTank: 'Booster tank',
   IntakeConnection: 'Intake connection',
-  TankFillValve: 'Tank Fill',
+  IntakeManifold: 'Intake manifold',
+  TankFillValve: 'Tank fill',
   Hydrant: 'Hydrant',
   DischargeValveLine: 'Discharge valve',
   DischargeConnectionLine: 'Discharge',
@@ -14,6 +15,7 @@ export const CstEngine = {
   Tank: {
     Volume: 4000,
   },
+  TankFillValve: { MaxFlow: 100 },
   IntakeValve: {
     MaxFlow: 100,
   },

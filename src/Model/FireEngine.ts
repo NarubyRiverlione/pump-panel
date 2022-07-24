@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx'
+import { mainModule } from 'process'
 import Connection from './Components/Connection'
 import FlowValve from './Components/FlowValve'
+import Manifold from './Components/ManiFold'
 import Pump from './Components/Pump'
 import Tank from './Components/Tank'
 import Valve from './Components/Valve'
@@ -29,43 +31,45 @@ import Line from './Line'
 
 export default class FireEngine {
   /*
-    Hydrant --> IntakeConnection  --> TankFill --> BoosterTank --> TankToPump --> EnginePump -> DischargeValve(x) --> DischargeConnection(x)
+  Hydrant --> IntakeConnection  --> IntakeManifold
+  BoosterTank --> TankToPump --> IntakeManifold
+
+  IntakeManifold --> TankFill --> BoosterTank
+
+  IntakeManifold --> EnginePump --> DischargeValve(x) --> DischargeConnection(x)
   */
-
-  /* TODO
-Hydrant --> IntakeConnection  --> IntakeManifold
-BoosterTank --> TankToPump --> IntakeManifold
-
-IntakeManifold --> TankFill --> BoosterTank
-
-IntakeManifold --> EnginePump --> DischargeValve(x) --> DischargeConnection(x)
-*/
 
   // hydrant has pressure so needs to be a dummy pump
   Hydrant: Pump | undefined
+  IntakeConnection: Connection
+
+  IntakeManifold: Manifold
 
   BoosterTank: Tank
-  TankFillValve: FlowValve
-  IntakeConnection: Connection
+  TankFillValve: Valve
+  TankToPumpValve: Valve
 
   DischargeValves: FlowValve[]
   DischargeConnections: Connection[]
 
   EnginePump: Pump
-  TankToPumpValve: Valve
 
   Running?: NodeJS.Timeout // ref setInterval
 
   constructor(BoosterTankContent = 0) {
     this.Hydrant = undefined
-
     this.IntakeConnection = new Connection(CstNames.IntakeConnection)
-    this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
-    this.TankFillValve = new FlowValve(CstNames.TankFillValve, this.IntakeConnection, CstEngine.IntakeValve.MaxFlow)
+    this.IntakeManifold = new Manifold(CstNames.IntakeManifold)
+    this.IntakeManifold.AddInput(this.IntakeConnection)
 
+    this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
+    this.TankFillValve = new Valve(CstNames.TankFillValve, this.IntakeManifold, CstEngine.TankFillValve.MaxFlow)
     this.TankToPumpValve = new Valve(CstNames.TankToPumpValve, this.BoosterTank)
+
+    this.IntakeManifold.AddInput(this.TankToPumpValve)
+
     this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM)
-    this.EnginePump.In = this.TankToPumpValve
+    this.EnginePump.In = this.IntakeManifold
 
     this.DischargeValves = new Array<FlowValve>()
     this.DischargeConnections = new Array<Connection>()

@@ -5,22 +5,20 @@ import Item from './Item'
 export default class Manifold implements Item {
   Name: string
   Inputs: Item[]
-  Outputs: Item[
-
-  ]
+  // Outputs: Item[]
   constructor(name: string) {
     this.Name = name
     this.Inputs = new Array<Item>()
-    this.Outputs = new Array<Item>()
+    // this.Outputs = new Array<Item>()
   }
 
   AddInput(input: Item) {
     this.Inputs.push(input)
   }
 
-  AddOutput(output: Item) {
-    this.Outputs.push(output)
-  }
+  // AddOutput(output: Item) {
+  //   this.Outputs.push(output)
+  // }
 
   get Content() {
     let totalContent = 0
