@@ -28,6 +28,19 @@ import Line from './Line'
 // todo pressure / flow loss in lines
 
 export default class FireEngine {
+  /*
+    Hydrant --> IntakeConnection  --> TankFill --> BoosterTank --> TankToPump --> EnginePump -> DischargeValve(x) --> DischargeConnection(x)
+  */
+
+  /* TODO
+Hydrant --> IntakeConnection  --> IntakeManifold
+BoosterTank --> TankToPump --> IntakeManifold
+
+IntakeManifold --> TankFill --> BoosterTank
+
+IntakeManifold --> EnginePump --> DischargeValve(x) --> DischargeConnection(x)
+*/
+
   // hydrant has pressure so needs to be a dummy pump
   Hydrant: Pump | undefined
 

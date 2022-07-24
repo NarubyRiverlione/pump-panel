@@ -1,3 +1,4 @@
+/* One-to-One connection */
 import {
   action, computed, makeObservable, observable,
 } from 'mobx'
