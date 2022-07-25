@@ -5,6 +5,7 @@ import Intake from './Intake'
 import MasterGauge from '../Components/MasterGauge'
 import PumpControls from '../Components/PumpControls'
 import SimContext from '../SimContext'
+import PanelPart from '../Components/PanelPart'
 
 const PumpPanel = observer(() => {
   const Sim = SimContext()
@@ -16,36 +17,53 @@ const PumpPanel = observer(() => {
     <div>
       {/* Master  */}
       <Row>
-        <Col>
-          <MasterGauge name="Master Intake" pressure={IntakePressure} />
+        <Col md={3}>
+          <PanelPart>
+            <MasterGauge name="Master Intake" pressure={IntakePressure} />
+          </PanelPart>
         </Col>
-        <Col>
-          <MasterGauge name="Master Discharge Output" pressure={Pressure} />
+        <Col md={3}>
+          <PanelPart>
+            <MasterGauge name="Master Discharge Output" pressure={Pressure} />
+          </PanelPart>
         </Col>
-        <Col>
+        <Col md={3}>
           <PumpControls />
         </Col>
+        <Col>
+          <Row className="PanelPart">Pump RPM</Row>
+          <Row className="PanelPart">Pump Temp</Row>
+        </Col>
       </Row>
-      {/* Discharges */}
+
       <Row style={{ paddingTop: '1em' }}>
+        {/* Discharges */}
         <Col md={2}>
-          <Discharge dischargeNumber={1} color="yellow" />
+          <PanelPart>
+            <Discharge dischargeNumber={1} color="yellow" />
+          </PanelPart>
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={2} color="blue" />
+          <PanelPart>
+            <Discharge dischargeNumber={2} color="blue" />
+          </PanelPart>
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={3} color="red" />
+          <PanelPart>
+            <Discharge dischargeNumber={3} color="red" />
+          </PanelPart>
         </Col>
         <Col md={2}>
-          <Discharge dischargeNumber={4} color="green" />
+          <PanelPart>
+            <Discharge dischargeNumber={4} color="green" />
+          </PanelPart>
         </Col>
 
         {/* Intake */}
         <Col>
           <Intake />
-          {/* TankFillValve={TankFillValve} TankToPumpValve={TankToPumpValve} BoosterTank={BoosterTank} /> */}
         </Col>
+
       </Row>
     </div>
   )

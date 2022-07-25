@@ -15,65 +15,114 @@ const PumpControls = observer(() => {
   }
 
   return (
-    <div>
-      <Row><h4>Pump Controls</h4></Row>
-      <Row>
+    <div style={{
+      background: 'black',
+      padding: '10px',
+    }}
+    >
+      <div style={{
+        padding: '10px',
+        border: ' 1px solid red',
+        borderRadius: '10%',
+      }}
+      >
 
-        <Col>
-          <Row>
-            <Col>
-              <div style={{ width: '100px' }}>
-                <Display
-                  value={isModePressure ? Pressure : RPM}
-                  digitCount={3}
-                />
-              </div>
-            </Col>
-            <Col>
-              <div style={{
-                display: 'flex', justifyContent: 'left', alignItems: 'flex-end', fontWeight: 500,
-              }}
-              >
-                {isModePressure ? 'Bar' : 'RPM'}
-              </div>
-            </Col>
-          </Row>
-
-          <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-            <Button
-              style={{ width: '100px' }}
-              color="info"
-              onClick={() => EnginePump.Toggle()}
-            >
-              MODE
-
-            </Button>
-          </Row>
-
-        </Col>
-
-        <Col>
-          <Row>
-            <div style={{ fontWeight: 500, padding: '1em' }}>
-              Setting up / down
+        {/* DISPLAY */}
+        <Row>
+          <Col md={{ offset: 3, size: 5 }}>
+            <div style={{ width: '100px' }}>
+              <Display
+                value={isModePressure ? Pressure : RPM}
+                digitCount={3}
+              />
             </div>
-          </Row>
-          <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
-            <Button style={{ width: '75px', height: '75px' }} onClick={() => { PumpIncDec(5) }}>
-              <div style={{ fontWeight: 800 }}>+</div>
+          </Col>
+          <Col md={4} style={{ padding: '10px' }}>
+            <Row style={{
+              display: 'flex',
+              justifyContent: 'left',
+              alignItems: 'center',
+              fontWeight: 500,
+              color: isModePressure ? 'red' : 'grey',
+            }}
+            >
+              BAR
+            </Row>
+            <Row style={{
+              display: 'flex',
+              justifyContent: 'left',
+              alignItems: 'center',
+              fontWeight: 500,
+              color: !isModePressure ? 'red' : 'grey',
+            }}
+            >
+              RPM
+            </Row>
+          </Col>
+        </Row>
 
-            </Button>
-          </Row>
-          <Row style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button style={{ width: '75px', height: '75px' }} onClick={() => { PumpIncDec(-5) }}>
-              <div style={{ fontWeight: 800 }}>-</div>
+        <Row>
+          {/* IDLE / ?? */}
+          <Col md={4}>
+            <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+              <Button
+                style={{ width: '100px' }}
+                color="danger"
+                onClick={() => EnginePump.Toggle()}
+              >
+                IDLE
+              </Button>
+            </Row>
+            <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+              <Button
+                style={{ width: '100px' }}
+                color="primary"
+                onClick={() => EnginePump.Toggle()}
+              >
+                ??
+              </Button>
+            </Row>
+          </Col>
+          {/* PRESET / MODE */}
+          <Col md={4}>
+            <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+              <Button
+                style={{ width: '100px' }}
+                color="warning"
+                onClick={() => EnginePump.Toggle()}
+              >
+                PRESET
+              </Button>
+            </Row>
+            <Row style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+              <Button
+                style={{ width: '100px' }}
+                color="success"
+                onClick={() => EnginePump.Toggle()}
+              >
+                MODE
+              </Button>
+            </Row>
+          </Col>
+          {/* INC / DEC  */}
+          <Col md={4}>
+            <Row style={{ display: 'flex', justifyContent: 'center', marginBottom: '1px' }}>
+              <Button onClick={() => { PumpIncDec(5) }}>
+                <div style={{ fontWeight: 800 }}>+</div>
+              </Button>
+            </Row>
 
-            </Button>
-          </Row>
+            <Row style={{ padding: '10px' }} />
 
-        </Col>
+            <Row style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button onClick={() => { PumpIncDec(-5) }}>
+                <div style={{ fontWeight: 800 }}>-</div>
+              </Button>
+            </Row>
+          </Col>
 
-      </Row>
+        </Row>
+      </div>
     </div>
   )
 })
