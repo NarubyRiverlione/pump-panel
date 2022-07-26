@@ -67,7 +67,7 @@ export default class FireEngine {
 
     this.IntakeManifold.AddInput(this.TankToPumpValve)
 
-    this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM)
+    this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM, CstEngine.Pump.IdleRPM)
     this.EnginePump.In = this.IntakeManifold
 
     this.DischargeValves = new Array<FlowValve>()
@@ -117,7 +117,7 @@ export default class FireEngine {
 
   CreateHydrant() {
     const unlimitedSource = new Tank(CstNames.Hydrant, CstHydrant.Volume, CstHydrant.Volume)
-    this.Hydrant = new Pump('Hydrant', CstHydrant.Pressure, CstHydrant.Pressure)
+    this.Hydrant = new Pump('Hydrant', CstHydrant.Pressure, CstHydrant.Pressure, 100)
     this.Hydrant.In = unlimitedSource
     this.Hydrant.Toggle() // put dummy pump in  pressure mode
     this.Hydrant.setPressure(CstHydrant.Pressure)
