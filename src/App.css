@@ -1,12 +1,10 @@
 body {
-  background-color: black;
+  background-color: darkgrey;
   text-align: center;
 }
 
 .PanelPart {
   background-color: silver;
-  padding: 10px;
-  margin: 5px;
 }
 
 .clockwise {
@@ -15,4 +13,9 @@ body {
 
 .counterClockwise {
   transform: rotate(-1turn);
+}
+
+.noMarginPadding {
+  margin: 0px;
+  padding: 0px;
 }

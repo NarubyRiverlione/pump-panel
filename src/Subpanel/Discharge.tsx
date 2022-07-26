@@ -29,11 +29,8 @@ const Discharge = observer(({ dischargeNumber, color }:PropsTypes) => {
     Sim.CloseDischarge(dischargeNumber, closeBy)
   }
   return (
-    <div style={{
-      // border: '5px solid', borderRadius: '20px', borderColor: `${color}`,
-      padding: '10px',
-    }}
-    >
+    <div>
+      {/* Gauge */}
       <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ReactRadialGauge
           units="bar"
@@ -41,8 +38,8 @@ const Discharge = observer(({ dischargeNumber, color }:PropsTypes) => {
           value={DischargeConnections[dischargeNumber - 1].Pressure}
           minValue={0}
           maxValue={50}
-          // width={300}
-          height={160}
+          width={170}
+          height={150}
           majorTicks={['0', '10', '20', '30', '40', '50']}
           minorTicks={5}
           valueBox={false}
@@ -53,6 +50,7 @@ const Discharge = observer(({ dischargeNumber, color }:PropsTypes) => {
           fontNumbersSize={18}
         />
       </Row>
+      {/* Level */}
       <Row>
         <div style={{
           display: 'flex', justifyContent: 'center', textAlign: 'center', padding: '10px',
