@@ -127,6 +127,8 @@ export default class FireEngine {
   ConnectHydrant() {
     if (!this.Hydrant) return // no hydrant available = always not connected
     this.IntakeConnection.ConnectInput(this.Hydrant)
+    // pump has now input pressure, adjust needed rpm for setpoint
+    if (this.EnginePump.isModePressure) { this.EnginePump.setPressure(this.EnginePump.Pressure) }
   }
   DisconnectHydrant() {
     this.IntakeConnection.DisconnectInput()

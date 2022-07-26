@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import { hydrate } from 'react-dom'
 import {
   CstEngine, CstHydrant, CstNames, CstSim,
 } from '../Cst'
@@ -252,9 +253,11 @@ describe('Discharging - using Line 1', () => {
 
     testFireEngine.ConnectLine(lineNr, new Line('test line'))
     testFireEngine.OpenDischarge(lineNr, openDischarge)
-    testFireEngine.EnginePump.setPressure(CstEngine.Pump.MaxPressure)
     TankToPumpValve.Open()
+    EnginePump.Toggle()
+    EnginePump.setMax()
 
+    expect(EnginePump.In?.Content).not.toBe(0)
     expect(EnginePump.Pressure).toBe(CstEngine.Pump.MaxPressure)
 
     expect(DischargeValves[lineNr - 1].Pressure).toBe(EnginePump.Pressure)
@@ -274,6 +277,7 @@ describe('Discharging - using Line 1', () => {
     testFireEngine.OpenDischarge(lineNr, openDischarge)
     testFireEngine.EnginePump.setPressure(CstEngine.Pump.MaxPressure)
     TankToPumpValve.Open()
+    EnginePump.setMax()
 
     expect(EnginePump.Pressure).toBe(CstEngine.Pump.MaxPressure)
 
@@ -301,7 +305,7 @@ describe('Discharging - using Line 1', () => {
     testFireEngine.OpenDischarge(lineNr, openDischarge)
     testFireEngine.EnginePump.setPressure(CstEngine.Pump.MaxPressure)
     TankToPumpValve.Open()
-
+    EnginePump.setMax()
     expect(EnginePump.Pressure).toBe(CstEngine.Pump.MaxPressure)
 
     testFireEngine.Thick()
@@ -317,10 +321,10 @@ describe('Discharging - using Line 1', () => {
     const {
       DischargeValves, BoosterTank, DischargeConnections, TankToPumpValve, EnginePump,
     } = testFireEngine
-    EnginePump.setPressure(CstEngine.Pump.MaxPressure)
     testFireEngine.ConnectLine(lineNr, new Line('test line'))
     testFireEngine.OpenDischarge(lineNr, openDischarge)
     TankToPumpValve.Open()
+    EnginePump.setMax()
     expect(DischargeValves[lineNr - 1].Content).toBe(startBooster)
 
     testFireEngine.Thick()
@@ -350,12 +354,28 @@ describe('Pump', () => {
     TankToPumpValve.Close()
     expect(EnginePump.Content).toBe(0)
   })
-  it('Connected hydrant -> Pump has content', () => {
+  it('Connected hydrant -> Pump has content & pressure (if in pressure mode)', () => {
     const testFireEngine = new FireEngine()
+    testFireEngine.EnginePump.Toggle()
+    expect(testFireEngine.EnginePump.isModePressure).toBeTruthy()
+
     testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
     const { Hydrant, EnginePump } = testFireEngine
     expect(EnginePump.Content).toBe(Hydrant?.Content)
+    expect(EnginePump.In?.Pressure).toBe(Hydrant?.Pressure)
+    expect(EnginePump.Pressure).toBe(Hydrant?.Pressure)
+  })
+  it('Connected hydrant -> Pump has content but pressure (if in rpm mode)', () => {
+    const testFireEngine = new FireEngine()
+    expect(testFireEngine.EnginePump.isModePressure).toBeFalsy()
+
+    testFireEngine.CreateHydrant()
+    testFireEngine.ConnectHydrant()
+    const { Hydrant, EnginePump } = testFireEngine
+    expect(EnginePump.Content).toBe(Hydrant?.Content)
+    expect(EnginePump.In?.Pressure).toBe(Hydrant?.Pressure)
+    expect(EnginePump.Pressure).toBe(0)
   })
 })
 

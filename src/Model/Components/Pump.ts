@@ -39,15 +39,28 @@ export default class Pump implements PumpInterface {
     if (this.RPM < this.IdleRPM) this.RPM = this.IdleRPM
     if (!this.isModePressure) this.setPressure((this.RPM - this.IdleRPM) / this.RPMtoPressureRatio)
   }
-  setPressure(newPressure: number) {
-    this.Pressure = newPressure < this.MaxPressure ? newPressure : this.MaxPressure
-    // this.Pressure = this.Pressure < 0 ? 0 : this.Pressures
-    if (this.isModePressure) this.setRPM(this.Pressure * this.RPMtoPressureRatio + this.IdleRPM)
+  setPressure(pressureSetpoint: number) {
+    // not pressure without input content
+    if (!this.In || this.In.Content === 0) {
+      this.Pressure = (0)
+      this.RPM = this.IdleRPM
+      this.isModePressure = false
+      return
+    }
+    // pressure max limited
+    this.Pressure = pressureSetpoint < this.MaxPressure ? pressureSetpoint : this.MaxPressure
+    // pressure min intake pressure (or zero)
+    this.Pressure = this.Pressure < (this.In.Pressure ?? 0) ? (this.In.Pressure ?? 0) : this.Pressure
+
+    if (this.isModePressure) {
+      const pressureNeeded = pressureSetpoint - (this.In.Pressure ?? 0)
+      this.setRPM(pressureNeeded * this.RPMtoPressureRatio + this.IdleRPM)
+    }
   }
 
   setIdle() {
     this.setRPM(this.IdleRPM)
-    this.setPressure(0)
+    this.setPressure(this.In?.Pressure ?? 0)
   }
   setMax() {
     this.setRPM(this.MaxRPM)
