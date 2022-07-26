@@ -28,6 +28,8 @@ import Line from './Line'
 
 // todo pressure / flow loss in lines
 
+// todo pump control preset toggle setpoint or max
+
 export default class FireEngine {
   /*
   Hydrant --> IntakeConnection  --> IntakeManifold

@@ -9,9 +9,7 @@ import PanelPart from '../Components/PanelPart'
 
 const PumpPanel = observer(() => {
   const Sim = SimContext()
-  const { EnginePump: { Pressure } } = Sim
-
-  const IntakePressure = 0
+  const { EnginePump, IntakeManifold } = Sim
 
   return (
     <div>
@@ -23,12 +21,12 @@ const PumpPanel = observer(() => {
             {/* Master  */}
             <Col>
               <PanelPart>
-                <MasterGauge name="Master Intake" pressure={IntakePressure} />
+                <MasterGauge name="Master Intake" pressure={IntakeManifold.Pressure ?? 0} />
               </PanelPart>
             </Col>
             <Col>
               <PanelPart>
-                <MasterGauge name="Master Discharge Output" pressure={Pressure} />
+                <MasterGauge name="Master Discharge Output" pressure={EnginePump.Pressure} />
               </PanelPart>
             </Col>
             {/* Pump controls */}

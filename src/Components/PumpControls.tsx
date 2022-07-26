@@ -35,7 +35,7 @@ const PumpControls = observer(() => {
                 <div style={{ width: '100px' }}>
                   <Display
                     value={isModePressure ? Pressure : RPM}
-                    digitCount={3}
+                    digitCount={4}
                   />
                 </div>
               </Col>
@@ -70,7 +70,7 @@ const PumpControls = observer(() => {
                   <Button
                     style={{ width: '100px' }}
                     color="danger"
-                    onClick={() => EnginePump.Toggle()}
+                    onClick={() => EnginePump.setIdle()}
                   >
                     IDLE
                   </Button>
@@ -91,7 +91,7 @@ const PumpControls = observer(() => {
                   <Button
                     style={{ width: '100px' }}
                     color="warning"
-                    onClick={() => EnginePump.Toggle()}
+                    onClick={() => EnginePump.setMax()}
                   >
                     PRESET
                   </Button>
