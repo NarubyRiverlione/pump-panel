@@ -22,7 +22,7 @@ const Intake = observer(() => {
   }
 
   return (
-    <div style={{ paddingTop: '1em' }}>
+    <div style={{ padding: '10px' }}>
       <Row>
         {/* Tank Level & intake connection */}
         <Col>
@@ -34,7 +34,7 @@ const Intake = observer(() => {
           </Row>
         </Col>
         {/* Tank to fill - Tank to pump valves */}
-        <Col className="PanelPart">
+        <Col>
           <Row>
             <Col>
               <ControlHandle

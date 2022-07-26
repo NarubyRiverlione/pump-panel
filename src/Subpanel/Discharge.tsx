@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { Row } from 'reactstrap'
+import { Col, Row } from 'reactstrap'
 import ControlHandle from '../Components/ControlHandle'
 // eslint-disable-next-line import/extensions
 import ReactRadialGauge from '../Components/Gauge/RadialGauge'
@@ -31,24 +31,27 @@ const Discharge = observer(({ dischargeNumber, color }:PropsTypes) => {
   return (
     <div>
       {/* Gauge */}
-      <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <ReactRadialGauge
-          units="bar"
-          title="Pressure"
-          value={DischargeConnections[dischargeNumber - 1].Pressure}
-          minValue={0}
-          maxValue={50}
-          width={170}
-          height={150}
-          majorTicks={['0', '10', '20', '30', '40', '50']}
-          minorTicks={5}
-          valueBox={false}
-          animationDuration="1500"
-          animationRule="elastic"
-          animation
-          highlights={[{ from: 10, to: 40, color: 'lightgray' }, { from: 40, to: 50, color: 'gray' }]}
-          fontNumbersSize={18}
-        />
+      <Row>
+        <Col md={2} />
+        <Col style={{ background: `${color}` }} md={8} className="noMarginPadding">
+          <ReactRadialGauge
+            units="bar"
+            title="Pressure"
+            value={DischargeConnections[dischargeNumber - 1].Pressure}
+            minValue={0}
+            maxValue={50}
+            // width={170}
+            height={150}
+            majorTicks={['0', '10', '20', '30', '40', '50']}
+            minorTicks={5}
+            valueBox={false}
+            animationDuration="1500"
+            animationRule="elastic"
+            animation
+            highlights={[{ from: 10, to: 40, color: 'lightgray' }, { from: 40, to: 50, color: 'gray' }]}
+            fontNumbersSize={18}
+          />
+        </Col>
       </Row>
       {/* Level */}
       <Row>

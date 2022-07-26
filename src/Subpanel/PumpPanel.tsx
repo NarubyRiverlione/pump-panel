@@ -15,55 +15,70 @@ const PumpPanel = observer(() => {
 
   return (
     <div>
-      {/* Master  */}
       <Row>
-        <Col md={3}>
-          <PanelPart>
-            <MasterGauge name="Master Intake" pressure={IntakePressure} />
-          </PanelPart>
+        {/* LEFT SIDE */}
+        <Col md={7}>
+          {/* LEFT - TOP : MASTER GAUGES & PUMP */}
+          <Row>
+            {/* Master  */}
+            <Col>
+              <PanelPart>
+                <MasterGauge name="Master Intake" pressure={IntakePressure} />
+              </PanelPart>
+            </Col>
+            <Col>
+              <PanelPart>
+                <MasterGauge name="Master Discharge Output" pressure={Pressure} />
+              </PanelPart>
+            </Col>
+            {/* Pump controls */}
+            <Col md={4}>
+              <PumpControls />
+            </Col>
+          </Row>
+
+          {/* LEFT - BOTTOM : DISCHARGES */}
+          <Row style={{ paddingTop: '1em' }}>
+            <Col>
+              <PanelPart>
+                <Discharge dischargeNumber={1} color="yellow" />
+              </PanelPart>
+            </Col>
+            <Col>
+              <PanelPart>
+                <Discharge dischargeNumber={2} color="blue" />
+              </PanelPart>
+            </Col>
+            <Col>
+              <PanelPart>
+                <Discharge dischargeNumber={3} color="red" />
+              </PanelPart>
+            </Col>
+            <Col>
+              <PanelPart>
+                <Discharge dischargeNumber={4} color="green" />
+              </PanelPart>
+            </Col>
+          </Row>
+
         </Col>
-        <Col md={3}>
-          <PanelPart>
-            <MasterGauge name="Master Discharge Output" pressure={Pressure} />
-          </PanelPart>
-        </Col>
-        <Col md={3}>
-          <PumpControls />
-        </Col>
+
+        {/* RIGHT SIDE */ }
         <Col>
-          <Row className="PanelPart">Pump RPM</Row>
-          <Row className="PanelPart">Pump Temp</Row>
-        </Col>
-      </Row>
 
-      <Row style={{ paddingTop: '1em' }}>
-        {/* Discharges */}
-        <Col md={2}>
-          <PanelPart>
-            <Discharge dischargeNumber={1} color="yellow" />
-          </PanelPart>
-        </Col>
-        <Col md={2}>
-          <PanelPart>
-            <Discharge dischargeNumber={2} color="blue" />
-          </PanelPart>
-        </Col>
-        <Col md={2}>
-          <PanelPart>
-            <Discharge dischargeNumber={3} color="red" />
-          </PanelPart>
-        </Col>
-        <Col md={2}>
-          <PanelPart>
-            <Discharge dischargeNumber={4} color="green" />
-          </PanelPart>
-        </Col>
+          {/* RIGHT - BOTTOM */}
+          <Row style={{ paddingTop: '1em' }}>
+            {/* Left - Large Discharge */}
 
-        {/* Intake */}
-        <Col>
-          <Intake />
-        </Col>
+            {/* Right - Intake */}
+            <Col>
+              <PanelPart>
+                <Intake />
+              </PanelPart>
+            </Col>
 
+          </Row>
+        </Col>
       </Row>
     </div>
   )
