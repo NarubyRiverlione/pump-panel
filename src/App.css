@@ -5,17 +5,45 @@ body {
 
 .PanelPart {
   background-color: silver;
-}
-
-.clockwise {
-  transform: rotate(1turn);
-}
-
-.counterClockwise {
-  transform: rotate(-1turn);
+  outline: 2px solid;
 }
 
 .noMarginPadding {
   margin: 0px;
   padding: 0px;
+}
+
+.collapsible {
+  background-color: silver;
+  color: #444;
+  cursor: pointer;
+  padding: 7px;
+  width: 100%;
+  border: solid;
+  /* outline: 1px solid; */
+  text-align: left;
+
+  font-size: 15px;
+}
+
+.collapsible:after {
+  content: '\02795';
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.about {
+  background-color: whitesmoke;
+  color: black;
+  padding: 5px;
+  margin-bottom: 1em;
+}
+
+.radioActions {
+  border: 1px solid white;
+  padding: 3px;
+  margin: 2px;
+  color: whitesmoke;
 }

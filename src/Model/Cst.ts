@@ -36,3 +36,8 @@ export const CstHydrant = {
   Volume: 1e6,
   Pressure: 10.0,
 }
+
+export const CstRadioActions = {
+  OpenHydrant: 'Open the hydrant',
+  ChargeLine: 'Charge line',
+}

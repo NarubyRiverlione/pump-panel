@@ -6,6 +6,7 @@ import MasterGauge from '../Components/MasterGauge'
 import PumpControls from '../Components/PumpControls'
 import SimContext from '../SimContext'
 import PanelPart from '../Components/PanelPart'
+import Radio from './Radio'
 
 const PumpPanel = observer(() => {
   const Sim = SimContext()
@@ -63,7 +64,12 @@ const PumpPanel = observer(() => {
 
         {/* RIGHT SIDE */ }
         <Col>
-
+          {/* RIGHT - TOP */}
+          <Row>
+            <PanelPart>
+              <Radio />
+            </PanelPart>
+          </Row>
           {/* RIGHT - BOTTOM */}
           <Row style={{ paddingTop: '1em' }}>
             {/* Left - Large Discharge */}

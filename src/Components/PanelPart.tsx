@@ -15,7 +15,7 @@ export default function PanelPart({ children }:PropsTypes) {
       </Row>
 
       <Row>
-        <Col md={{ offset: 1, size: 10 }} style={{ padding: '5px', border: '1px solid  white' }}>
+        <Col md={{ offset: 1, size: 10 }} style={{ padding: '5px', border: '1px solid  lightgrey' }}>
           {children}
         </Col>
         <Col />
