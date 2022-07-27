@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { Col, Row } from 'reactstrap'
 import ControlHandle from '../Components/ControlHandle'
-// eslint-disable-next-line import/extensions
-import ReactRadialGauge from '../Components/Gauge/RadialGauge'
+import ReactRadialGauge from '../Components/Gauge/RadialGauge.jsx'
 import SimContext from '../SimContext'
 
 type PropsTypes = {

@@ -13,7 +13,7 @@ const _canvasGauges = require('canvas-gauges')
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj } }
 
-function ReactRadialGauge(props) {
+export default function ReactRadialGauge(props) {
   let el = void 0;
 
   (0, _react.useEffect)(() => {
@@ -31,4 +31,4 @@ function ReactRadialGauge(props) {
   })
 }
 
-exports.default = ReactRadialGauge
+// exports.default = ReactRadialGauge

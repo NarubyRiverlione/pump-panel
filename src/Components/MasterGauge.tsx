@@ -1,7 +1,6 @@
 import React from 'react'
 import { Row } from 'reactstrap'
-// eslint-disable-next-line import/extensions
-import ReactRadialGauge from './Gauge/RadialGauge'
+import ReactRadialGauge from './Gauge/RadialGauge.jsx'
 
 type PropsTypes = {
   name:string

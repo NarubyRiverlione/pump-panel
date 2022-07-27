@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { hydrate } from 'react-dom'
 import {
   CstEngine, CstHydrant, CstNames, CstSim,
 } from '../Cst'
