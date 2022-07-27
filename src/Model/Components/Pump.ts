@@ -74,5 +74,7 @@ export default class Pump implements PumpInterface {
   }
   Toggle() {
     this.isModePressure = !this.isModePressure
+    if (this.isModePressure) { this.setPressure(this.Pressure) }
+    // this.setRPM(this.RPM)
   }
 }

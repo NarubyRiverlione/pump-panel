@@ -15,10 +15,10 @@ export const CstEngine = {
   Tank: {
     Volume: 4000,
   },
-  TankFillValve: { MaxFlow: 100 },
-  IntakeValve: {
-    MaxFlow: 100,
-  },
+  // TankFillValve: { MaxFlow: 100 },
+  // IntakeValve: {
+  //   MaxFlow: 100,
+  // },
   Discharges: {
     [`${CstNames.DischargeValveLine} 1`]: { MaxFlow: 200 },
     [`${CstNames.DischargeValveLine} 2`]: { MaxFlow: 200 },
@@ -32,9 +32,10 @@ export const CstSim = {
 }
 export const CstHydrant = {
   // ToDo: make hydrant flow rate random
-  MaxFlow: 100,
-  Volume: 1e6,
+  MaxFlow: 120,
+  MinFlow: 70,
   Pressure: 10.0,
+  Name: 'Hydrant',
 }
 
 export const CstRadioActions = {

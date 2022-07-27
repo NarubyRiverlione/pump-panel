@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  CstEngine, CstHydrant, CstNames, CstSim,
+  CstEngine, CstNames, CstSim,
 } from '../Cst'
 import FireEngine from '../FireEngine'
 import Line from '../Line'
@@ -74,45 +74,29 @@ describe('Fire engine init', () => {
   })
 })
 
-describe('Hydrant', () => {
-  test('Has initial no hydrant', () => {
-    const testFireEngine = new FireEngine()
-    expect(testFireEngine.Hydrant).toBeUndefined()
-  })
-
-  test('Create hydrant', () => {
-    const testFireEngine = new FireEngine()
-    testFireEngine.CreateHydrant()
-    const { Hydrant } = testFireEngine
-    expect(Hydrant?.Name).toBe(CstNames.Hydrant)
-    expect(Hydrant?.Content).toBe(CstHydrant.Volume)
-  })
-})
-
 describe('Intake connection', () => {
-  test('Connect to hydrant = Intake connection has hydrant content', () => {
+  test('Connect to closed StreetHydrant = Intake connection has no content', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
 
-    const { IntakeConnection, Hydrant } = testFireEngine
-    expect(IntakeConnection.In).not.toBeNull()
-    expect(IntakeConnection.Content).toBe(Hydrant?.Content)
+    const { IntakeConnection, StreetHydrant } = testFireEngine
+    expect(IntakeConnection.In).toMatchObject(StreetHydrant)
+    expect(IntakeConnection.Content).toBe(0)
     expect(testFireEngine.isHydrantConnected).toBeTruthy()
   })
-  test('Try connect but not hydrant available  = no connection', () => {
+  test('Connect to open StreetHydrant = Intake connection has hydrant content', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.ConnectHydrant()
-
-    const { IntakeConnection, Hydrant } = testFireEngine
-    expect(Hydrant).toBeUndefined()
-    expect(IntakeConnection.In).toBeNull()
-    expect(IntakeConnection.Content).toBe(0)
-    expect(testFireEngine.isHydrantConnected).toBeFalsy()
+    testFireEngine.StreetHydrant.Open()
+    const { IntakeConnection, StreetHydrant } = testFireEngine
+    expect(IntakeConnection.In).toMatchObject(StreetHydrant)
+    expect(IntakeConnection.Content).toBe(StreetHydrant.Content)
+    expect(testFireEngine.isHydrantConnected).toBeTruthy()
   })
-  test('Disconnect from hydrant = Intake has no content', () => {
+
+  test('Disconnect from StreetHydrant = Intake has no content', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.CreateHydrant()
+
     testFireEngine.ConnectHydrant()
     testFireEngine.DisconnectHydrant()
 
@@ -126,22 +110,24 @@ describe('Intake connection', () => {
 describe('Fill booster tank', () => {
   it('Open tank fill valve = fill booster tank each Thick', () => {
     const testFireEngine = new FireEngine()
-    const { BoosterTank, TankFillValve } = testFireEngine
-    testFireEngine.CreateHydrant()
+    const {
+      BoosterTank, TankFillValve, StreetHydrant, IntakeConnection, IntakeManifold,
+    } = testFireEngine
     testFireEngine.ConnectHydrant()
-
+    StreetHydrant.Open()
     TankFillValve.Open()
-    expect(TankFillValve.Content).toBe(CstEngine.TankFillValve.MaxFlow)
     testFireEngine.Thick()
-    expect(BoosterTank.Content).toBe(CstEngine.TankFillValve.MaxFlow)
+    expect(IntakeConnection.Content).toBe(StreetHydrant.MaxFlow)
+    expect(IntakeManifold.Content).toBe(StreetHydrant.MaxFlow)
+    expect(BoosterTank.Content).toBe(StreetHydrant.MaxFlow)
 
     testFireEngine.Thick()
-    expect(BoosterTank.Content).toBe(CstEngine.TankFillValve.MaxFlow * 2)
+    expect(BoosterTank.Content).toBe(StreetHydrant.MaxFlow * 2)
   })
 
   it.skip('Open tank fill valve more = fill booster tank faster each Thick', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.CreateHydrant()
+
     testFireEngine.ConnectHydrant()
     const { BoosterTank, TankFillValve } = testFireEngine
     const startOpenBy = 10
@@ -163,7 +149,7 @@ describe('Fill booster tank', () => {
 
   it.skip('Close the opened tank fill valve a bit = fill booster tank slower each Thick', () => {
     const testFireEngine = new FireEngine()
-    testFireEngine.CreateHydrant()
+
     testFireEngine.ConnectHydrant()
     const { BoosterTank, TankFillValve } = testFireEngine
     const startOpenBy = 10
@@ -353,27 +339,26 @@ describe('Pump', () => {
     TankToPumpValve.Close()
     expect(EnginePump.Content).toBe(0)
   })
-  it('Connected hydrant -> Pump has content & pressure (if in pressure mode)', () => {
+  it('Connected to open StreetHydrant -> Pump has content & pressure (if in pressure mode)', () => {
     const testFireEngine = new FireEngine()
+    const { StreetHydrant, EnginePump } = testFireEngine
+    testFireEngine.ConnectHydrant()
+    StreetHydrant.Open()
     testFireEngine.EnginePump.Toggle()
     expect(testFireEngine.EnginePump.isModePressure).toBeTruthy()
 
-    testFireEngine.CreateHydrant()
-    testFireEngine.ConnectHydrant()
-    const { Hydrant, EnginePump } = testFireEngine
-    expect(EnginePump.Content).toBe(Hydrant?.Content)
-    expect(EnginePump.In?.Pressure).toBe(Hydrant?.Pressure)
-    expect(EnginePump.Pressure).toBe(Hydrant?.Pressure)
+    expect(EnginePump.Content).toBe(StreetHydrant.Content)
+    expect(EnginePump.In?.Pressure).toBe(StreetHydrant.Pressure)
+    expect(EnginePump.Pressure).toBe(StreetHydrant.Pressure)
   })
-  it('Connected hydrant -> Pump has content but pressure (if in rpm mode)', () => {
+  it('Connected StreetHydrant -> Pump has content but pressure (if in rpm mode)', () => {
     const testFireEngine = new FireEngine()
     expect(testFireEngine.EnginePump.isModePressure).toBeFalsy()
 
-    testFireEngine.CreateHydrant()
     testFireEngine.ConnectHydrant()
-    const { Hydrant, EnginePump } = testFireEngine
-    expect(EnginePump.Content).toBe(Hydrant?.Content)
-    expect(EnginePump.In?.Pressure).toBe(Hydrant?.Pressure)
+    const { StreetHydrant, EnginePump } = testFireEngine
+    expect(EnginePump.Content).toBe(StreetHydrant.Content)
+    expect(EnginePump.In?.Pressure).toBe(StreetHydrant.Pressure)
     expect(EnginePump.Pressure).toBe(0)
   })
 })

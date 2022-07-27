@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import Connection from './Components/Connection'
 import FlowValve from './Components/FlowValve'
+import Hydrant from './Components/Hydrant'
 import Manifold from './Components/ManiFold'
 import Pump from './Components/Pump'
 import Tank from './Components/Tank'
@@ -41,7 +42,7 @@ export default class FireEngine {
   */
 
   // hydrant has pressure so needs to be a dummy pump
-  Hydrant: Pump | undefined
+  StreetHydrant: Hydrant
   IntakeConnection: Connection
 
   IntakeManifold: Manifold
@@ -58,13 +59,16 @@ export default class FireEngine {
   Running?: NodeJS.Timeout // ref setInterval
 
   constructor(BoosterTankContent = 0) {
-    this.Hydrant = undefined
+    const hydrantFlow = CstHydrant.MaxFlow // todo random min - max
+    const hydrantPressure = CstHydrant.Pressure // todo random min - max
+    this.StreetHydrant = new Hydrant(CstNames.Hydrant, hydrantFlow, hydrantPressure)
+
     this.IntakeConnection = new Connection(CstNames.IntakeConnection)
     this.IntakeManifold = new Manifold(CstNames.IntakeManifold)
     this.IntakeManifold.AddInput(this.IntakeConnection)
 
     this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
-    this.TankFillValve = new Valve(CstNames.TankFillValve, this.IntakeManifold, CstEngine.TankFillValve.MaxFlow)
+    this.TankFillValve = new Valve(CstNames.TankFillValve, this.IntakeManifold, this.StreetHydrant.MaxFlow)
     this.TankToPumpValve = new Valve(CstNames.TankToPumpValve, this.BoosterTank)
 
     this.IntakeManifold.AddInput(this.TankToPumpValve)
@@ -117,16 +121,8 @@ export default class FireEngine {
     }
   }
 
-  CreateHydrant() {
-    const unlimitedSource = new Tank(CstNames.Hydrant, CstHydrant.Volume, CstHydrant.Volume)
-    this.Hydrant = new Pump('Hydrant', CstHydrant.Pressure, CstHydrant.Pressure, 100)
-    this.Hydrant.In = unlimitedSource
-    this.Hydrant.Toggle() // put dummy pump in  pressure mode
-    this.Hydrant.setPressure(CstHydrant.Pressure)
-  }
   ConnectHydrant() {
-    if (!this.Hydrant) return // no hydrant available = always not connected
-    this.IntakeConnection.ConnectInput(this.Hydrant)
+    this.IntakeConnection.ConnectInput(this.StreetHydrant)
     // pump has now input pressure, adjust needed rpm for setpoint
     if (this.EnginePump.isModePressure) { this.EnginePump.setPressure(this.EnginePump.Pressure) }
   }
@@ -134,8 +130,7 @@ export default class FireEngine {
     this.IntakeConnection.DisconnectInput()
   }
   get isHydrantConnected() {
-    if (!this.Hydrant) return false // no hydrant available = always not connected
-    return this.IntakeConnection.In === this.Hydrant
+    return this.IntakeConnection.In === this.StreetHydrant
   }
 
   ConnectLine(lineNr: number, line: Line) {

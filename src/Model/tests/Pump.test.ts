@@ -37,6 +37,8 @@ describe('Pump init', () => {
   })
   it('Toggle pump mode', () => {
     const testPump = new Pump('test pump', maxPressure, maxRPM, idleRPM)
+    testPump.In = testInputWithPressure
+    expect(testPump.isModePressure).toBeFalsy()
     testPump.Toggle()
     expect(testPump.isModePressure).toBeTruthy()
   })
