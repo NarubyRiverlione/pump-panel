@@ -66,9 +66,11 @@ const PumpPanel = observer(() => {
         <Col>
           {/* RIGHT - TOP */}
           <Row>
-            <PanelPart>
-              <Radio />
-            </PanelPart>
+            <Col>
+              <PanelPart>
+                <Radio />
+              </PanelPart>
+            </Col>
           </Row>
           {/* RIGHT - BOTTOM */}
           <Row style={{ paddingTop: '1em' }}>

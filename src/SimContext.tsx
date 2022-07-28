@@ -4,7 +4,6 @@ import FireEngine from './Model/FireEngine'
 const simulator = new FireEngine(0)
 const SimulatorContext = React.createContext<FireEngine>(simulator)
 simulator.Start()
-simulator.CreateHydrant()
 
 type PropsTypes = {
   children:JSX.Element

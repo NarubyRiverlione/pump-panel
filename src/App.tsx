@@ -1,4 +1,4 @@
-import { Container, Row } from 'reactstrap'
+import { Col, Container, Row } from 'reactstrap'
 import './App.css'
 import { SimulatorProvider } from './SimContext'
 import Header from './Subpanel/Header'
@@ -14,7 +14,10 @@ function App() {
         </Row>
 
         <Row>
-          <PumpPanel />
+          {/* <Col md={1} className="FireEngineSides" /> */}
+          <Col md={1} className="FireEngineSideShadow" />
+          <Col className="Panel"><PumpPanel /></Col>
+          <Col md={1} className="FireEngineSides" />
         </Row>
 
       </Container>
