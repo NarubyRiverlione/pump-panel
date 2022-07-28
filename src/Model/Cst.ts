@@ -31,14 +31,21 @@ export const CstSim = {
   Interval: 1000,
 }
 export const CstHydrant = {
+  Name: 'Hydrant',
   // ToDo: make hydrant flow rate random
   MaxFlow: 120,
   MinFlow: 70,
   Pressure: 10.0,
-  Name: 'Hydrant',
+  WaitTimeReady: 2000, // ms
 }
 
-export const CstRadioActions = {
-  OpenHydrant: 'Open the hydrant',
-  ChargeLine: 'Charge line',
+export const CstRadio = {
+  Actions: {
+    OpenHydrant: 'Open the hydrant',
+    CloseHydrant: 'Close the hydrant',
+    ChargeLine: 'Charge line',
+  },
+  Messages: {
+    HydrantReady: 'Hydrant is ready to open',
+  },
 }

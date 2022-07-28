@@ -7,7 +7,7 @@ import Pump from './Components/Pump'
 import Tank from './Components/Tank'
 import Valve from './Components/Valve'
 import {
-  CstEngine, CstHydrant, CstNames, CstSim,
+  CstEngine, CstHydrant, CstNames, CstRadio, CstSim,
 } from './Cst'
 import Line from './Line'
 
@@ -56,6 +56,11 @@ export default class FireEngine {
 
   EnginePump: Pump
 
+  Messages: string[]
+
+  NewMsg: boolean
+  RadioBlinker: boolean
+
   Running?: NodeJS.Timeout // ref setInterval
 
   constructor(BoosterTankContent = 0) {
@@ -83,6 +88,11 @@ export default class FireEngine {
     this.SetupDischarge(3)
     this.SetupDischarge(4)
 
+    this.Messages = []
+    this.NewMsg = false
+    this.RadioBlinker = false
+
+    this.StartHydrantReadyTimer()
     makeAutoObservable(this)
   }
 
@@ -96,7 +106,22 @@ export default class FireEngine {
     this.DischargeConnections[lineNr - 1].In = this.DischargeValves[lineNr - 1]
   }
 
+  StartHydrantReadyTimer() {
+    setTimeout(() => {
+      this.StreetHydrant.isReady = true
+      this.Messages.push(CstRadio.Messages.HydrantReady)
+      this.NewMsg = true
+    }, CstHydrant.WaitTimeReady)
+  }
+
+  ClearNewMsg() {
+    this.NewMsg = false
+    this.RadioBlinker = false
+  }
+
   Thick() {
+    if (this.NewMsg) this.RadioBlinker = !this.RadioBlinker
+
     this.BoosterTank.AddThisStep = this.TankFillValve.Content
 
     // only discharge when output is connected
@@ -106,6 +131,9 @@ export default class FireEngine {
     })
     this.BoosterTank.RemoveThisStep = totalDischarge
     this.BoosterTank.Thick()
+
+    // // pump has now input pressure, adjust needed rpm for setpoint
+    // if (this.EnginePump.isModePressure) { this.EnginePump.setPressure(this.EnginePump.Pressure) }
   }
 
   Start() {
@@ -123,8 +151,6 @@ export default class FireEngine {
 
   ConnectHydrant() {
     this.IntakeConnection.ConnectInput(this.StreetHydrant)
-    // pump has now input pressure, adjust needed rpm for setpoint
-    if (this.EnginePump.isModePressure) { this.EnginePump.setPressure(this.EnginePump.Pressure) }
   }
   DisconnectHydrant() {
     this.IntakeConnection.DisconnectInput()

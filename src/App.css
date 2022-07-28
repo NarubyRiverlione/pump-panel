@@ -75,3 +75,11 @@ body {
   margin: 2px;
   color: whitesmoke;
 }
+
+.radio {
+  background-color: silver;
+}
+
+.radioNewMsg {
+  background-color: gray;
+}

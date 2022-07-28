@@ -70,6 +70,7 @@
       "es6": true
     },
     "rules": {
+      "no-multiple-empty-lines": "warn",
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/camelcase": "off",
       "@typescript-eslint/lines-between-class-members": "off",

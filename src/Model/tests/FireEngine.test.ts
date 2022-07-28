@@ -75,26 +75,28 @@ describe('Fire engine init', () => {
 })
 
 describe('Intake connection', () => {
-  test('Connect to closed StreetHydrant = Intake connection has no content', () => {
+  test('Connect to closed StreetHydrant = Intake connection has no content nor pressure', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.ConnectHydrant()
 
     const { IntakeConnection, StreetHydrant } = testFireEngine
     expect(IntakeConnection.In).toMatchObject(StreetHydrant)
     expect(IntakeConnection.Content).toBe(0)
+    expect(IntakeConnection.Pressure).toBe(0)
     expect(testFireEngine.isHydrantConnected).toBeTruthy()
   })
   test('Connect to open StreetHydrant = Intake connection has hydrant content', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.ConnectHydrant()
     testFireEngine.StreetHydrant.Open()
-    const { IntakeConnection, StreetHydrant } = testFireEngine
-    expect(IntakeConnection.In).toMatchObject(StreetHydrant)
-    expect(IntakeConnection.Content).toBe(StreetHydrant.Content)
+    const { IntakeConnection, StreetHydrant, IntakeManifold } = testFireEngine
     expect(testFireEngine.isHydrantConnected).toBeTruthy()
+    expect(IntakeConnection.Content).toBe(StreetHydrant.Content)
+    expect(IntakeConnection.Pressure).toBe(StreetHydrant.Pressure)
+    expect(IntakeManifold.Pressure).toBe(StreetHydrant.Pressure)
   })
 
-  test('Disconnect from StreetHydrant = Intake has no content', () => {
+  test('Disconnect from StreetHydrant = Intake has no content nor pressure', () => {
     const testFireEngine = new FireEngine()
 
     testFireEngine.ConnectHydrant()
@@ -103,6 +105,7 @@ describe('Intake connection', () => {
     const { IntakeConnection } = testFireEngine
     expect(IntakeConnection.In).toBeNull()
     expect(IntakeConnection.Content).toBe(0)
+    expect(IntakeConnection.Pressure).toBe(0)
     expect(testFireEngine.isHydrantConnected).toBeFalsy()
   })
 })
@@ -114,6 +117,7 @@ describe('Fill booster tank', () => {
       BoosterTank, TankFillValve, StreetHydrant, IntakeConnection, IntakeManifold,
     } = testFireEngine
     testFireEngine.ConnectHydrant()
+    StreetHydrant.isReady = true
     StreetHydrant.Open()
     TankFillValve.Open()
     testFireEngine.Thick()
@@ -343,6 +347,7 @@ describe('Pump', () => {
     const testFireEngine = new FireEngine()
     const { StreetHydrant, EnginePump } = testFireEngine
     testFireEngine.ConnectHydrant()
+    StreetHydrant.isReady = true
     StreetHydrant.Open()
     testFireEngine.EnginePump.Toggle()
     expect(testFireEngine.EnginePump.isModePressure).toBeTruthy()
