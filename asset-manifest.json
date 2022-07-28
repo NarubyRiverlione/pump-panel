@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/pump-panel/static/css/main.897b9a24.css",
-    "main.js": "/pump-panel/static/js/main.0fa78c6e.js",
+    "main.css": "/pump-panel/static/css/main.d70856ca.css",
+    "main.js": "/pump-panel/static/js/main.a69b7a65.js",
     "static/js/787.82f6fa2e.chunk.js": "/pump-panel/static/js/787.82f6fa2e.chunk.js",
     "index.html": "/pump-panel/index.html",
-    "main.897b9a24.css.map": "/pump-panel/static/css/main.897b9a24.css.map",
-    "main.0fa78c6e.js.map": "/pump-panel/static/js/main.0fa78c6e.js.map",
+    "main.d70856ca.css.map": "/pump-panel/static/css/main.d70856ca.css.map",
+    "main.a69b7a65.js.map": "/pump-panel/static/js/main.a69b7a65.js.map",
     "787.82f6fa2e.chunk.js.map": "/pump-panel/static/js/787.82f6fa2e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.897b9a24.css",
-    "static/js/main.0fa78c6e.js"
+    "static/css/main.d70856ca.css",
+    "static/js/main.a69b7a65.js"
   ]
 }
