@@ -67,6 +67,7 @@ body {
   color: black;
   padding: 5px;
   margin-bottom: 1em;
+  white-space: pre-line;
 }
 
 .radioActions {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
   Button, Col, Collapse, Row,
 } from 'reactstrap'
+import { HeaderTxt } from '../Model/Cst'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,11 +19,7 @@ export default function Header() {
         <Button className="collapsible" onClick={toggle} style={{ marginBottom: '1rem' }}>Help / About</Button>
         <Collapse isOpen={isOpen}>
           <div className="about">
-            This simulates the pump panel of fire engine.
-            <br />
-            Click on the radio icon to send a message.
-            <br />
-            Left click to pull a handle. Right click to push.
+            { HeaderTxt}
           </div>
         </Collapse>
 

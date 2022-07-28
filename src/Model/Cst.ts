@@ -49,3 +49,16 @@ export const CstRadio = {
     HydrantReady: 'Hydrant is ready to open',
   },
 }
+
+export const HeaderTxt = `This simulates the pump panel of fire engine.
+  
+  Left click to pull a handle.  Right click to push.
+
+  The radio blinks if there's a new message.
+  Click on the icon to open the radio to receive the message.
+  Click again to send a message.
+
+  Click multiple time on the intake to open the cap.
+  If the intake is open, click again to connect the yellow intake hose.
+  Call over the radio to open the hydrant. Watch the intake pressure gauge
+  `
