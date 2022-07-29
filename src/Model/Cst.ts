@@ -36,7 +36,7 @@ export const CstHydrant = {
   MaxFlow: 120,
   MinFlow: 70,
   Pressure: 10.0,
-  WaitTimeReady: 2000, // ms
+  WaitTimeReady: 10000, // ms
 }
 
 export const CstRadio = {
