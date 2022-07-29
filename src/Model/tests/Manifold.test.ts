@@ -109,4 +109,13 @@ describe('Pressure', () => {
 
     expect(testManifold.Pressure).toBe(pressure1)
   })
+  it('input losse pressure -> manifold pressure also zero', () => {
+    const testManifold = new Manifold('test')
+    const pressure1 = 20
+    const testIn1 = new MockPump('test in 01', 100, 200)
+    testIn1.Pressure = pressure1
+    testManifold.AddInput(testIn1)
+    testIn1.Pressure = 0
+    expect(testManifold.Pressure).toBe(0)
+  })
 })

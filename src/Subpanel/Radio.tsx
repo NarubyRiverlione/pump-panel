@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Row, Col } from 'reactstrap'
 import radio from '../Components/radio.png'
 import RadioActions from '../Components/RadioActions'

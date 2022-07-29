@@ -267,7 +267,7 @@ describe('Discharging - using Line 1', () => {
     testFireEngine.EnginePump.setPressure(CstEngine.Pump.MaxPressure)
     TankToPumpValve.Open()
     EnginePump.setMax()
-
+    testFireEngine.Thick()
     expect(EnginePump.Pressure).toBe(CstEngine.Pump.MaxPressure)
 
     expect(DischargeValves[lineNr - 1].Content).toBe(calcFlow(openDischarge))
@@ -364,6 +364,43 @@ describe('Pump', () => {
     const { StreetHydrant, EnginePump } = testFireEngine
     expect(EnginePump.Content).toBe(StreetHydrant.Content)
     expect(EnginePump.In?.Pressure).toBe(StreetHydrant.Pressure)
+    expect(EnginePump.Pressure).toBe(0)
+  })
+  it('CLose StreetHydrant -> Pump has no content & pressure', () => {
+    const testFireEngine = new FireEngine()
+    const {
+      StreetHydrant, EnginePump, IntakeConnection, IntakeManifold,
+    } = testFireEngine
+    testFireEngine.ConnectHydrant()
+    StreetHydrant.isReady = true
+    StreetHydrant.Open()
+    testFireEngine.EnginePump.Toggle()
+    expect(testFireEngine.EnginePump.isModePressure).toBeTruthy()
+
+    StreetHydrant.Close()
+    testFireEngine.Thick()
+
+    expect(IntakeConnection.Pressure).toBe(0)
+    expect(IntakeManifold.Pressure).toBe(0)
+    expect(EnginePump.In?.Content).toBe(0)
+    expect(EnginePump.Content).toBe(0)
+    expect(EnginePump.In?.Pressure).toBe(0)
+    expect(EnginePump.Pressure).toBe(0)
+  })
+  it('Disconnect StreetHydrant -> Pump has no content & pressure', () => {
+    const testFireEngine = new FireEngine()
+    const { StreetHydrant, EnginePump } = testFireEngine
+    testFireEngine.ConnectHydrant()
+    StreetHydrant.isReady = true
+    StreetHydrant.Open()
+    testFireEngine.EnginePump.Toggle()
+    expect(testFireEngine.EnginePump.isModePressure).toBeTruthy()
+
+    testFireEngine.DisconnectHydrant()
+    testFireEngine.Thick()
+
+    expect(EnginePump.Content).toBe(0)
+    expect(EnginePump.In?.Pressure).toBe(0)
     expect(EnginePump.Pressure).toBe(0)
   })
 })

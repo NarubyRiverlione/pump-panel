@@ -4,7 +4,7 @@ import {
 } from 'reactstrap'
 import { HeaderTxt } from '../Model/Cst'
 
-export default function Header() {
+export default function Footer() {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen(!isOpen)
@@ -16,12 +16,12 @@ export default function Header() {
       </Col>
 
       <Col>
-        <Button className="collapsible" onClick={toggle} style={{ marginBottom: '1rem' }}>Help / About</Button>
         <Collapse isOpen={isOpen}>
           <div className="about">
             { HeaderTxt}
           </div>
         </Collapse>
+        <Button className="collapsible" onClick={toggle} style={{ marginBottom: '1rem' }}>Help / About</Button>
 
       </Col>
     </Row>

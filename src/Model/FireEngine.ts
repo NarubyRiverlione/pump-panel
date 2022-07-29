@@ -132,8 +132,7 @@ export default class FireEngine {
     this.BoosterTank.RemoveThisStep = totalDischarge
     this.BoosterTank.Thick()
 
-    // // pump has now input pressure, adjust needed rpm for setpoint
-    // if (this.EnginePump.isModePressure) { this.EnginePump.setPressure(this.EnginePump.Pressure) }
+    this.EnginePump.Thick()
   }
 
   Start() {

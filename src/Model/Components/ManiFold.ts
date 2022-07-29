@@ -5,20 +5,15 @@ import Item from './Item'
 export default class Manifold implements Item {
   Name: string
   Inputs: Item[]
-  // Outputs: Item[]
+
   constructor(name: string) {
     this.Name = name
     this.Inputs = new Array<Item>()
-    // this.Outputs = new Array<Item>()
   }
 
   AddInput(input: Item) {
     this.Inputs.push(input)
   }
-
-  // AddOutput(output: Item) {
-  //   this.Outputs.push(output)
-  // }
 
   get Content() {
     let totalContent = 0
@@ -36,6 +31,6 @@ export default class Manifold implements Item {
     }
 
     const sortedPressures = this.Inputs.sort((a, b) => findGreatestPressure(a, b))
-    return sortedPressures[this.Inputs.length - 1].Pressure
+    return sortedPressures[this.Inputs.length - 1].Pressure ?? 0
   }
 }

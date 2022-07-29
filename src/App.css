@@ -1,34 +1,11 @@
 body {
   background-color: red;
-
 }
 
 .Panel {
   background-color: darkgrey;
   text-align: center;
   padding: 1em;
-  /* margin: 4em; */
-  /* box-shadow: -1em 1em crimson inset; */
-}
-
-.FireEngine {
-  background-color: red;
-}
-
-.FireEngineSides {
-  background-color: red;
-  width: 1em;
-}
-
-.FireEngineSideShadow {
-  background: linear-gradient(90deg, red 0%, rgba(171, 47, 47, 1) 100%);
-  width: 2em;
-}
-
-.FireEngineBottomShadow {
-  background: linear-gradient(0deg, red 0%, rgba(171, 47, 47, 1) 100%);
-
-  /* width: 1em; */
 }
 
 .PanelPart {
@@ -83,4 +60,13 @@ body {
 
 .radioNewMsg {
   background-color: gray;
+}
+
+.shutter {
+  transition: transform 2s ease-out;
+}
+
+.shutterOpen {
+  transform: translateY(-99%);
+  pointer-events: none;
 }

@@ -42,7 +42,7 @@ export default class Pump implements PumpInterface {
   setPressure(pressureSetpoint: number) {
     // not pressure without input content
     if (!this.In || this.In.Content === 0) {
-      this.Pressure = (0)
+      this.Pressure = 0
       this.RPM = this.IdleRPM
       this.isModePressure = false
       return
@@ -56,6 +56,12 @@ export default class Pump implements PumpInterface {
       const pressureNeeded = pressureSetpoint - (this.In.Pressure ?? 0)
       this.setRPM(pressureNeeded * this.RPMtoPressureRatio + this.IdleRPM)
     }
+  }
+
+  // evaluate all conditions
+  Thick() {
+    this.setRPM(this.RPM)
+    this.setPressure(this.Pressure)
   }
 
   setIdle() {
