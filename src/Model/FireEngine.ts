@@ -63,7 +63,7 @@ export default class FireEngine {
 
   Running?: NodeJS.Timeout // ref setInterval
 
-  constructor(BoosterTankContent = 0) {
+  constructor(HydrantReadyTimeSec = 0, BoosterTankContent = 0) {
     const hydrantFlow = CstHydrant.MaxFlow // todo random min - max
     const hydrantPressure = CstHydrant.Pressure // todo random min - max
     this.StreetHydrant = new Hydrant(CstNames.Hydrant, hydrantFlow, hydrantPressure)
@@ -92,7 +92,7 @@ export default class FireEngine {
     this.NewMsg = false
     this.RadioBlinker = false
 
-    this.StartHydrantReadyTimer()
+    this.StartHydrantReadyTimer(HydrantReadyTimeSec)
     makeAutoObservable(this)
   }
 
@@ -106,12 +106,12 @@ export default class FireEngine {
     this.DischargeConnections[lineNr - 1].In = this.DischargeValves[lineNr - 1]
   }
 
-  StartHydrantReadyTimer() {
+  StartHydrantReadyTimer(HydrantReadyTimeSec: number) {
     setTimeout(() => {
       this.StreetHydrant.isReady = true
       this.Messages.push(CstRadio.Messages.HydrantReady)
       this.NewMsg = true
-    }, CstHydrant.WaitTimeReady)
+    }, HydrantReadyTimeSec * 1000)
   }
 
   ClearNewMsg() {

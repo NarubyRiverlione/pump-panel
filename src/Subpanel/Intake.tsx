@@ -24,41 +24,36 @@ const Intake = observer(() => {
   return (
     <div style={{ padding: '10px' }}>
       <Row>
-        {/* Tank Level & intake connection */}
-        <Col>
-          <Row>
-            <TankLevel tankContent={BoosterTank.Content} tankVolume={BoosterTank.Volume} />
-          </Row>
-          <Row>
-            <IntakeConnection />
-          </Row>
+        {/* Tank Level */}
+        <Col md={4}>
+          <TankLevel tankContent={BoosterTank.Content} tankVolume={BoosterTank.Volume} />
+        </Col>
+        {/* intake connection  */}
+        <Col md={4}>
+          <IntakeConnection />
         </Col>
         {/* Tank to fill - Tank to pump valves */}
-        <Col>
-          <Row>
-            <Col>
-              <ControlHandle
-                Name="Tank fill"
-                BorderColor="black"
-                Value={TankFillValve.isOpen ? 100 : 0}
-                cbOnLeftClick={LeftClickTankFill}
-                cbOnRightClick={RightClickTankFill}
-              />
-            </Col>
-          </Row>
 
-          <Row>
-            <Col>
-              <ControlHandle
-                Name="Tank to Pump"
-                BorderColor="black"
-                Value={TankToPumpValve.isOpen ? 100 : 0}
-                cbOnLeftClick={LeftClickTankToPump}
-                cbOnRightClick={RightClickTankToPump}
-              />
-            </Col>
-          </Row>
+        <Col>
+          <ControlHandle
+            Name="Tank fill"
+            BorderColor="black"
+            Value={TankFillValve.isOpen ? 100 : 0}
+            cbOnLeftClick={LeftClickTankFill}
+            cbOnRightClick={RightClickTankFill}
+          />
         </Col>
+
+        <Col>
+          <ControlHandle
+            Name="Tank to Pump"
+            BorderColor="black"
+            Value={TankToPumpValve.isOpen ? 100 : 0}
+            cbOnLeftClick={LeftClickTankToPump}
+            cbOnRightClick={RightClickTankToPump}
+          />
+        </Col>
+
       </Row>
 
     </div>

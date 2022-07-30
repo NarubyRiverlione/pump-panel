@@ -9,7 +9,7 @@ function App() {
     <SimulatorProvider>
       <Container fluid>
         <Row>
-          <Col style={{ margin: '2em' }}><PumpPanel /></Col>
+          <Col><PumpPanel /></Col>
         </Row>
 
         <Row>

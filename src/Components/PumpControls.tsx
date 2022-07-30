@@ -65,50 +65,53 @@ const PumpControls = observer(() => {
 
             <Row>
               {/* IDLE / ?? */}
-              <Col md={4}>
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+              <Col md={4} className="noMarginPadding">
+                <Row className="pumpControl">
                   <Button
-                    style={{ width: '100px' }}
                     color="danger"
                     onClick={() => EnginePump.setIdle()}
+                    className="pumpControlText"
                   >
                     IDLE
                   </Button>
                 </Row>
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+                <Row className="pumpControl">
                   <Button
                     style={{ width: '100px' }}
                     color="primary"
                     onClick={() => EnginePump.Toggle()}
+                    className="pumpControlText"
                   >
                     ??
                   </Button>
                 </Row>
               </Col>
               {/* PRESET / MODE */}
-              <Col md={4}>
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+              <Col md={4} className="noMarginPadding">
+                <Row className="pumpControl">
                   <Button
-                    style={{ width: '100px' }}
                     color="warning"
                     onClick={() => EnginePump.setMax()}
+                    className="pumpControlText"
                   >
                     PRESET
                   </Button>
                 </Row>
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+                <Row className="pumpControl">
                   <Button
                     style={{ width: '100px' }}
                     color="success"
                     onClick={() => EnginePump.Toggle()}
+                    className="pumpControlText"
                   >
                     MODE
                   </Button>
                 </Row>
               </Col>
+
               {/* INC / DEC  */}
-              <Col md={4}>
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingRight: '10px' }}>
+              <Col md={4} className="noMarginPadding">
+                <Row className="pumpControl">
                   <Button onClick={() => { PumpIncDec(5) }}>
                     <div style={{ fontWeight: 800 }}>+</div>
                   </Button>
@@ -116,7 +119,7 @@ const PumpControls = observer(() => {
 
                 <Row style={{ padding: '10px' }} />
 
-                <Row style={{ display: 'flex', justifyContent: 'center', paddingRight: '10px' }}>
+                <Row className="pumpControl">
                   <Button onClick={() => { PumpIncDec(-5) }}>
                     <div style={{ fontWeight: 800 }}>-</div>
                   </Button>
@@ -128,12 +131,12 @@ const PumpControls = observer(() => {
         </div>
       </Row>
 
-      <Row style={{ paddingTop: '1em' }}>
+      {/* <Row style={{ paddingTop: '1em' }}>
         <Col>
           <Row className="PanelPart">Pump RPM</Row>
           <Row className="PanelPart">Pump Temp</Row>
         </Col>
-      </Row>
+      </Row> */}
     </div>
   )
 })

@@ -1,6 +1,6 @@
 import { Row, Col } from 'reactstrap'
 import { observer } from 'mobx-react-lite'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import Discharge from './Discharge'
 import Intake from './Intake'
 import MasterGauge from '../Components/MasterGauge'
@@ -17,13 +17,11 @@ const PumpPanel = observer(() => {
 
   return (
     <div>
-      <div style={{ position: 'fixed', zIndex: '10' }} className={opening ? 'shutterOpen shutter' : 'shutter'}>
-        <Shutter Clicked={() => { setOpening(true) }} />
-      </div>
-      <div style={{ position: 'relative', zIndex: '1' }} className="Panel">
+      {/* PANEL */}
+      <div className="Panel">
         <Row>
           {/* LEFT SIDE */}
-          <Col md={7}>
+          <Col md={8}>
             {/* LEFT - TOP : MASTER GAUGES & PUMP */}
             <Row>
               {/* Master  */}
@@ -94,6 +92,11 @@ const PumpPanel = observer(() => {
           </Col>
         </Row>
       </div>
+      {/* SHUTTER */}
+      <div className={opening ? 'Shutter-Open Shutter' : 'Shutter'}>
+        <Shutter Clicked={() => { setOpening(true) }} />
+      </div>
+
     </div>
   )
 })

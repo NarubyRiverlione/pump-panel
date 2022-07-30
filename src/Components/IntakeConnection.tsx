@@ -34,33 +34,30 @@ const IntakeConnection = observer(() => {
   }
 
   return (
-    <div>
-      <svg width={200} height={200}>
-        <g
-          onMouseDown={(e) => MouseDown(e)}
+    <svg width={200} height={200}>
+      <g
+        onMouseDown={(e) => MouseDown(e)}
+      >
+        {/* <text x={30} y={15}>INTAKE</text> */}
+        <circle cx={90} cy={90} r={75} fill="gray" stroke="black" />
+        {!isOpen && (
+          <rect
+            x={0}
+            y={80}
+            height={20}
+            width={180}
+            stroke="black"
+            fill="darkgrey"
+            transform={`rotate(${Move * 45} 90 90)`}
+          />
+        )}
 
-        >
-          <text x={30} y={15}>INTAKE</text>
-          <circle cx={90} cy={100} r={75} fill="gray" stroke="black" />
-          {!isOpen && (
-            <rect
-              x={0}
-              y={90}
-              height={20}
-              width={180}
-              stroke="black"
-              fill="darkgrey"
-              transform={`rotate(${Move * 45} 90 100)`}
-            />
-          )}
+        {isOpen && (
+          <circle cx={90} cy={90} r={60} fill={isHydrantConnected ? 'yellow' : 'lightgrey'} stroke="black" />
+        )}
 
-          {isOpen && (
-            <circle cx={90} cy={100} r={60} fill={isHydrantConnected ? 'yellow' : 'lightgrey'} stroke="black" />
-          )}
-
-        </g>
-      </svg>
-    </div>
+      </g>
+    </svg>
   )
 })
 

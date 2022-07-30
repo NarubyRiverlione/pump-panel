@@ -2,10 +2,30 @@ body {
   background-color: red;
 }
 
+h4 {
+  font-size: clamp(1rem, 1rem + 0.25vw, 3rem);
+}
+
 .Panel {
   background-color: darkgrey;
   text-align: center;
-  padding: 1em;
+  padding: 1rem;
+  margin: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.Shutter {
+  transition: transform 2s ease-out;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  margin: 1rem;
+}
+
+.Shutter-Open {
+  transform: translateY(-99%);
+  pointer-events: none;
 }
 
 .PanelPart {
@@ -43,7 +63,7 @@ body {
   background-color: whitesmoke;
   color: black;
   padding: 5px;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
   white-space: pre-line;
 }
 
@@ -62,11 +82,14 @@ body {
   background-color: gray;
 }
 
-.shutter {
-  transition: transform 2s ease-out;
+
+
+.pumpControl {
+  display: flex;
+  justify-content: center;
+  margin: 10px 10px;
 }
 
-.shutterOpen {
-  transform: translateY(-99%);
-  pointer-events: none;
+.pumpControlText {
+  font-size: clamp(0.75rem, 0.25rem, 2rem);
 }

@@ -17,13 +17,13 @@ describe('Fire engine init', () => {
   })
   test('Start with content in booster tank', () => {
     const startContent = 150
-    const engineWithContent = new FireEngine(startContent)
+    const engineWithContent = new FireEngine(0, startContent)
     const { BoosterTank } = engineWithContent
     expect(BoosterTank.Content).toBe(startContent)
   })
   test('Tank content is not changing', () => {
     const startContent = 150
-    const engineWithContent = new FireEngine(startContent)
+    const engineWithContent = new FireEngine(0, startContent)
     engineWithContent.Thick()
     expect(engineWithContent.BoosterTank.Content).toBe(startContent)
   })
@@ -195,7 +195,7 @@ describe('Discharge connections', () => {
 describe('Discharging - using Line 1', () => {
   it('Discharge has no content when valve is closed', () => {
     const startBooster = 1000
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const { DischargeConnections, DischargeValves, BoosterTank } = testFireEngine
     testFireEngine.Thick()
     expect(DischargeValves[0].Content).toBe(0)
@@ -207,7 +207,7 @@ describe('Discharging - using Line 1', () => {
     const startBooster = 1000
     const openDischarge = 25
     const lineNr = 3
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const { DischargeConnections, DischargeValves, TankToPumpValve } = testFireEngine
 
     testFireEngine.OpenDischarge(lineNr, openDischarge)
@@ -220,7 +220,7 @@ describe('Discharging - using Line 1', () => {
     const startBooster = 1000
     const openDischarge = 25
     const lineNr = 4
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const { DischargeConnections, BoosterTank } = testFireEngine
 
     testFireEngine.OpenDischarge(lineNr, openDischarge)
@@ -235,7 +235,7 @@ describe('Discharging - using Line 1', () => {
     const startBooster = 1000
     const openDischarge = 100
     const lineNr = 1
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const {
       TankToPumpValve, DischargeConnections, EnginePump, DischargeValves,
     } = testFireEngine
@@ -257,7 +257,7 @@ describe('Discharging - using Line 1', () => {
     const openDischarge = 25
     const closeDischarge = 5
     const lineNr = 1
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const {
       TankToPumpValve, DischargeConnections, EnginePump, DischargeValves,
     } = testFireEngine
@@ -285,7 +285,7 @@ describe('Discharging - using Line 1', () => {
     const startBooster = 1000
     const openDischarge = 25
     const lineNr = 1
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const {
       BoosterTank, TankToPumpValve, EnginePump,
     } = testFireEngine
@@ -306,7 +306,7 @@ describe('Discharging - using Line 1', () => {
     const startBooster = 180
     const openDischarge = 100 // = drain maxFlow = 200
     const lineNr = 2
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const {
       DischargeValves, BoosterTank, DischargeConnections, TankToPumpValve, EnginePump,
     } = testFireEngine
@@ -330,14 +330,14 @@ describe('Discharging - using Line 1', () => {
 describe('Pump', () => {
   it('Tank to pump open => Pump has booster tank content', () => {
     const startBooster = 1257
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const { TankToPumpValve, EnginePump, BoosterTank } = testFireEngine
     TankToPumpValve.Open()
     expect(EnginePump.Content).toBe(BoosterTank.Content)
   })
   it('Tank to pump closed => Pump has no content', () => {
     const startBooster = 1257
-    const testFireEngine = new FireEngine(startBooster)
+    const testFireEngine = new FireEngine(0, startBooster)
     const { TankToPumpValve, EnginePump } = testFireEngine
     TankToPumpValve.Open()
     TankToPumpValve.Close()
