@@ -11,37 +11,28 @@ import {
 } from './Cst'
 import Line from './Line'
 
-// todo own Hydrant type so open / closing hydrant = pump max or off
 // todo random hydrant pressure / flow
 
 // todo Radio /event system
-// - intake line takes time to lay
-// - call for "open hydrant"
 // - receive call "charge line X"
 
 // todo readout / UI
-// - intake pressure from hydrant to main intake gauge
 // - discharge flow
 // - discharge in use (nozzle open)
 // - total discharge flow ?
 
-// todo beter UI for tank level
-
 // todo pressure / flow loss in lines
-
-// todo pump control preset toggle setpoint or max
 
 export default class FireEngine {
   /*
   Hydrant --> IntakeConnection  --> IntakeManifold
   BoosterTank --> TankToPump --> IntakeManifold
 
-  IntakeManifold --> TankFill --> BoosterTank
+  EnginePump --> TankFill --> BoosterTank
 
   IntakeManifold --> EnginePump --> DischargeValve(x) --> DischargeConnection(x)
   */
 
-  // hydrant has pressure so needs to be a dummy pump
   StreetHydrant: Hydrant
   IntakeConnection: Connection
 
@@ -72,12 +63,6 @@ export default class FireEngine {
     this.IntakeManifold = new Manifold(CstNames.IntakeManifold)
     this.IntakeManifold.AddInput(this.IntakeConnection)
 
-    this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
-    this.TankFillValve = new Valve(CstNames.TankFillValve, this.IntakeManifold, this.StreetHydrant.MaxFlow)
-    this.TankToPumpValve = new Valve(CstNames.TankToPumpValve, this.BoosterTank)
-
-    this.IntakeManifold.AddInput(this.TankToPumpValve)
-
     this.EnginePump = new Pump(CstNames.Pump, CstEngine.Pump.MaxPressure, CstEngine.Pump.MaxRPM, CstEngine.Pump.IdleRPM)
     this.EnginePump.In = this.IntakeManifold
 
@@ -87,6 +72,11 @@ export default class FireEngine {
     this.SetupDischarge(2)
     this.SetupDischarge(3)
     this.SetupDischarge(4)
+
+    this.BoosterTank = new Tank(CstNames.BoosterTank, CstEngine.Tank.Volume, BoosterTankContent)
+    this.TankToPumpValve = new Valve(CstNames.TankToPumpValve, this.BoosterTank)
+    this.IntakeManifold.AddInput(this.TankToPumpValve)
+    this.TankFillValve = new Valve(CstNames.TankFillValve, this.EnginePump, this.StreetHydrant.MaxFlow)
 
     this.Messages = []
     this.NewMsg = false

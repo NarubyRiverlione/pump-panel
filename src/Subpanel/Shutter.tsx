@@ -35,6 +35,14 @@ export default function Shutter({ Clicked }:PropsTypes) {
         fill="black"
       />
       {ShutterParts.map((part) => part)}
+
+      <text x={window.innerWidth / 3} y={window.innerHeight / 3} fill="white">
+        Welcome to the fire engine pump simulator
+      </text>
+      <text x={window.innerWidth / 3} y={window.innerHeight / 2} fill="white">
+        Click to open the shutter
+
+      </text>
     </svg>
   )
 }

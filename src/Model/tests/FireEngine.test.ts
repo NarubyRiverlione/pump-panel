@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
+import { exec } from 'child_process'
 import {
-  CstEngine, CstNames, CstSim,
+  CstEngine, CstNames, CstRadio, CstSim,
 } from '../Cst'
 import FireEngine from '../FireEngine'
 import Line from '../Line'
@@ -27,12 +28,11 @@ describe('Fire engine init', () => {
     engineWithContent.Thick()
     expect(engineWithContent.BoosterTank.Content).toBe(startContent)
   })
-  test('Has a "tank fill" valve that is input from the Intake manifold', () => {
+  test('Has a "tank fill" valve that is input from the EnginePump', () => {
     const testFireEngine = new FireEngine()
-    const { TankFillValve, IntakeManifold } = testFireEngine
-    expect(TankFillValve).not.toBeNull()
+    const { TankFillValve, EnginePump } = testFireEngine
     expect(TankFillValve.Content).toBe(0)
-    expect(TankFillValve.Source).toMatchObject(IntakeManifold)
+    expect(TankFillValve.Source).toMatchObject(EnginePump)
   })
   test('Has a "tank to pump" valve that output to the Intake manifold', () => {
     const testFireEngine = new FireEngine()
@@ -114,19 +114,35 @@ describe('Fill booster tank', () => {
   it('Open tank fill valve = fill booster tank each Thick', () => {
     const testFireEngine = new FireEngine()
     const {
-      BoosterTank, TankFillValve, StreetHydrant, IntakeConnection, IntakeManifold,
+      BoosterTank, TankFillValve, StreetHydrant, EnginePump,
     } = testFireEngine
     testFireEngine.ConnectHydrant()
     StreetHydrant.isReady = true
     StreetHydrant.Open()
     TankFillValve.Open()
     testFireEngine.Thick()
-    expect(IntakeConnection.Content).toBe(StreetHydrant.MaxFlow)
-    expect(IntakeManifold.Content).toBe(StreetHydrant.MaxFlow)
+
+    expect(EnginePump.Content).toBe(StreetHydrant.MaxFlow)
     expect(BoosterTank.Content).toBe(StreetHydrant.MaxFlow)
 
     testFireEngine.Thick()
     expect(BoosterTank.Content).toBe(StreetHydrant.MaxFlow * 2)
+  })
+  it('Open tank fill valve but hydrant not open =  booster tank not filling', () => {
+    const testFireEngine = new FireEngine()
+    const {
+      BoosterTank, TankFillValve, EnginePump,
+    } = testFireEngine
+    testFireEngine.ConnectHydrant()
+
+    TankFillValve.Open()
+    testFireEngine.Thick()
+
+    expect(EnginePump.Content).toBe(0)
+    expect(BoosterTank.Content).toBe(0)
+
+    testFireEngine.Thick()
+    expect(BoosterTank.Content).toBe(0)
   })
 
   it.skip('Open tank fill valve more = fill booster tank faster each Thick', () => {
@@ -264,8 +280,9 @@ describe('Discharging - using Line 1', () => {
 
     testFireEngine.ConnectLine(lineNr, new Line('test line'))
     testFireEngine.OpenDischarge(lineNr, openDischarge)
-    testFireEngine.EnginePump.setPressure(CstEngine.Pump.MaxPressure)
+
     TankToPumpValve.Open()
+    EnginePump.Toggle()
     EnginePump.setMax()
     testFireEngine.Thick()
     expect(EnginePump.Pressure).toBe(CstEngine.Pump.MaxPressure)
@@ -430,5 +447,23 @@ describe('Simulator running tests', () => {
     const testFireEngine = new FireEngine()
     testFireEngine.Stop()
     expect(testFireEngine.Running).toBeUndefined()
+  })
+})
+
+describe('Radio', () => {
+  it('Clear new message', (done) => {
+    jest.useFakeTimers()
+    const testFireEngine = new FireEngine(1, 0)
+    const { Messages } = testFireEngine
+    jest.runAllTimers()
+    do {
+      testFireEngine.Thick()
+    } while (testFireEngine.NewMsg === false)
+
+    expect(Messages[0]).toBe(CstRadio.Messages.HydrantReady)
+
+    testFireEngine.ClearNewMsg()
+    expect(testFireEngine.NewMsg).toBeFalsy()
+    done()
   })
 })
